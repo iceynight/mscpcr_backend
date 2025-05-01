@@ -1,15 +1,15 @@
 package com.mscpcr.mscpcr.repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.mscpcr.mscpcr.entity.LegalCase;
 import com.mscpcr.mscpcr.entity.LegalCase.Casestatus;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface LegalCaseRepository extends JpaRepository<LegalCase, Long> {
@@ -23,6 +23,6 @@ public interface LegalCaseRepository extends JpaRepository<LegalCase, Long> {
     
     
     
-    @Query("SELECT l FROM legalcase l WHERE l.currentstatus = :status AND l.district.id = :districtId")
+    @Query("SELECT l FROM LegalCase l WHERE l.currentstatus = :status AND l.district.id = :districtId")
     List<LegalCase> findByStatusAndDistrict(Casestatus status, Long districtId);
 }

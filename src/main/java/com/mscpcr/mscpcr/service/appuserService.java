@@ -1,16 +1,16 @@
 package com.mscpcr.mscpcr.service;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.mscpcr.mscpcr.entity.AppUser;
 import com.mscpcr.mscpcr.entity.AppUser.Usertype;
 import com.mscpcr.mscpcr.repository.AppUserRepository;
 import com.mscpcr.mscpcr.repository.DistrictRepository;
 import com.mscpcr.mscpcr.util.PasswordUtil;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.security.crypto.password.PasswordEncoder; 
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -37,7 +37,7 @@ public class AppUserService {
         }
 
         // Hash password before saving
-        user.setPasswordhash(PasswordUtil.hashPassword(user.getPasswordhash()));
+        user.setPasswordhash(PasswordUtil.encodePassword(user.getPasswordhash()));
         
         return appuserRepository.save(user);
     }
@@ -82,7 +82,7 @@ public class AppUserService {
                 .orElse("");
             
             if (!PasswordUtil.checkPassword(user.getPasswordhash(), currentHash)) {
-                user.setPasswordhash(PasswordUtil.hashPassword(user.getPasswordhash()));
+                user.setPasswordhash(PasswordUtil.encodePassword(user.getPasswordhash()));
             }
         }
         
