@@ -1,8 +1,8 @@
 package com.mscpcr.mscpcr.service;
 
-import com.mscpcr.mscpcr.entity.policecasedetail;
-import com.mscpcr.mscpcr.entity.policecasedetail.policecasestatus;
-import com.mscpcr.mscpcr.repository.policecasedetailRepository;
+import com.mscpcr.mscpcr.entity.PoliceCaseDetail;
+import com.mscpcr.mscpcr.entity.PoliceCaseDetail.policecasestatus;
+import com.mscpcr.mscpcr.repository.PoliceCaseDetailRepository;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,27 +12,27 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class policecasedetailService {
-    private final policecasedetailRepository policeCaseDetailRepository;
+public class PoliceCaseDetailService {
+    private final PoliceCaseDetailRepository policeCaseDetailRepository;
 
-    public policecasedetailService(policecasedetailRepository policeCaseDetailRepository) {
+    public PoliceCaseDetailService(PoliceCaseDetailRepository policeCaseDetailRepository) {
         this.policeCaseDetailRepository = policeCaseDetailRepository;
     }
 
-    public policecasedetail savePoliceCaseDetail(policecasedetail policeCaseDetail) {
+    public PoliceCaseDetail savePoliceCaseDetail(PoliceCaseDetail policeCaseDetail) {
         return policeCaseDetailRepository.save(policeCaseDetail);
     }
 
-    public Optional<policecasedetail> findBylegalCaseId(Long caseId) {
+    public Optional<PoliceCaseDetail> findBylegalCaseId(Long caseId) {
         return policeCaseDetailRepository.findBylegalcaseId(caseId);
     }
 
-    public List<policecasedetail> findCasesByStatus(policecasestatus status) {
+    public List<PoliceCaseDetail> findCasesByStatus(policecasestatus status) {
         return policeCaseDetailRepository.findByCasestatus(status);
     }
 
-    public policecasedetail updateCaseStatus(Long caseId, policecasestatus status) {
-        policecasedetail detail = policeCaseDetailRepository.findBylegalcaseId(caseId)
+    public PoliceCaseDetail updateCaseStatus(Long caseId, policecasestatus status) {
+        PoliceCaseDetail detail = policeCaseDetailRepository.findBylegalcaseId(caseId)
             .orElseThrow(() -> new RuntimeException("Case not found"));
         detail.setCasestatus(status);
         return policeCaseDetailRepository.save(detail);

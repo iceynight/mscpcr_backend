@@ -1,10 +1,10 @@
 package com.mscpcr.mscpcr.service;
 
 
-import com.mscpcr.mscpcr.entity.dcpucasedetail;
-import com.mscpcr.mscpcr.entity.dcpucasedetail.dcpuaction;
-import com.mscpcr.mscpcr.entity.dcpucasedetail.caseprogress;
-import com.mscpcr.mscpcr.repository.dcpucasedetailRepository;
+import com.mscpcr.mscpcr.entity.DcpuCaseDetail;
+import com.mscpcr.mscpcr.entity.DcpuCaseDetail.dcpuaction;
+import com.mscpcr.mscpcr.entity.DcpuCaseDetail.caseprogress;
+import com.mscpcr.mscpcr.repository.DcpuCaseDetailRepository;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,31 +14,31 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class dcpucasedetailService {
-    private final dcpucasedetailRepository dcpuCaseDetailRepository;
+public class DcpuCaseDetailService {
+    private final DcpuCaseDetailRepository dcpuCaseDetailRepository;
 
-    public dcpucasedetailService(dcpucasedetailRepository dcpuCaseDetailRepository) {
+    public DcpuCaseDetailService(DcpuCaseDetailRepository dcpuCaseDetailRepository) {
         this.dcpuCaseDetailRepository = dcpuCaseDetailRepository;
     }
 
-    public dcpucasedetail saveDcpuCaseDetail(dcpucasedetail dcpuCaseDetail) {
+    public DcpuCaseDetail saveDcpuCaseDetail(DcpuCaseDetail dcpuCaseDetail) {
         return dcpuCaseDetailRepository.save(dcpuCaseDetail);
     }
 
-    public Optional<dcpucasedetail> findBylegalCaseId(Long caseId) {
+    public Optional<DcpuCaseDetail> findBylegalCaseId(Long caseId) {
         return dcpuCaseDetailRepository.findBylegalcaseId(caseId);
     }
 
-    public List<dcpucasedetail> findCasesByAction(dcpuaction action) {
+    public List<DcpuCaseDetail> findCasesByAction(dcpuaction action) {
         return dcpuCaseDetailRepository.findByActionbycwc(action);
     }
 
-    public List<dcpucasedetail> findCasesByProgress(caseprogress progress) {
+    public List<DcpuCaseDetail> findCasesByProgress(caseprogress progress) {
         return dcpuCaseDetailRepository.findByCaseprogress(progress);
     }
 
-    public dcpucasedetail updateCaseProgress(Long caseId, caseprogress progress) {
-        dcpucasedetail detail = dcpuCaseDetailRepository.findBylegalcaseId(caseId)
+    public DcpuCaseDetail updateCaseProgress(Long caseId, caseprogress progress) {
+        DcpuCaseDetail detail = dcpuCaseDetailRepository.findBylegalcaseId(caseId)
             .orElseThrow(() -> new RuntimeException("Case not found"));
         detail.setCaseprogress(progress);
         return dcpuCaseDetailRepository.save(detail);

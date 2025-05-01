@@ -4,25 +4,25 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.mscpcr.mscpcr.entity.legalcase;
-import com.mscpcr.mscpcr.entity.legalcase.Casestatus;
+import com.mscpcr.mscpcr.entity.LegalCase;
+import com.mscpcr.mscpcr.entity.LegalCase.Casestatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface legalcaseRepository extends JpaRepository<legalcase, Long> {
-    Optional<legalcase> findByCaseuuid(String caseUuid);
-    List<legalcase> findByCurrentstatus(Casestatus status);
-    List<legalcase> findByDistrictId(Long districtId);
-    List<legalcase> findByCreatedbyId(Long userId);
-    List<legalcase> findByCreatedatBetween(LocalDateTime start, LocalDateTime end);
-    List<legalcase> findByChildnameContainingIgnoreCase(String childname);
-    List<legalcase> findByComplainantnameContainingIgnoreCase(String complainantname);
+public interface LegalCaseRepository extends JpaRepository<LegalCase, Long> {
+    Optional<LegalCase> findByCaseuuid(String caseUuid);
+    List<LegalCase> findByCurrentstatus(Casestatus status);
+    List<LegalCase> findByDistrictId(Long districtId);
+    List<LegalCase> findByCreatedbyId(Long userId);
+    List<LegalCase> findByCreatedatBetween(LocalDateTime start, LocalDateTime end);
+    List<LegalCase> findByChildnameContainingIgnoreCase(String childname);
+    List<LegalCase> findByComplainantnameContainingIgnoreCase(String complainantname);
     
     
     
     @Query("SELECT l FROM legalcase l WHERE l.currentstatus = :status AND l.district.id = :districtId")
-    List<legalcase> findByStatusAndDistrict(Casestatus status, Long districtId);
+    List<LegalCase> findByStatusAndDistrict(Casestatus status, Long districtId);
 }

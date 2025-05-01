@@ -19,7 +19,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "appuser")
-public class appuser {
+public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,7 +36,7 @@ public class appuser {
     
     @ManyToOne
     @JoinColumn(name = "districtid")
-    private district district;
+    private District district;
     
     private boolean isactive = true;
     
@@ -45,7 +45,7 @@ public class appuser {
     
     @ManyToOne
     @JoinColumn(name = "createdby")
-    private appuser createdby;
+    private AppUser createdby;
     
     // Getters and setters
     public enum Usertype {
@@ -84,11 +84,11 @@ public class appuser {
         this.usertype = usertype;
     }
 
-    public district getDistrict() {
+    public District getDistrict() {
         return district;
     }
 
-    public void setDistrict(district district) {
+    public void setDistrict(District district) {
         this.district = district;
     }
 
@@ -108,11 +108,11 @@ public class appuser {
         this.createdat = createdat;
     }
 
-    public appuser getCreatedby() {
+    public AppUser getCreatedby() {
         return createdby;
     }
 
-    public void setCreatedby(appuser createdby) {
+    public void setCreatedby(AppUser createdby) {
         this.createdby = createdby;
     }
 

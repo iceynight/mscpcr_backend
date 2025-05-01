@@ -42,6 +42,7 @@ public class LoginController {
 
     @GetMapping("/admin/dashboard")
     public String dashboard() {
-        return "admin-dashboard"; // Create admin-dashboard.html in templates/
+        return "admin-dashboard";
     }
+    
 }

@@ -33,11 +33,12 @@
 								</span>
 							</div>
 						</div>
-					</form>
+					</form>`
 					 <!-- Add New User Button -->
-                     <button class="btn btn-primary" onclick="window.location.href='@{/admin-create-user}'">
-                        Add New User
-                    </button>
+					 <button class="btn btn-primary" th:onclick="'window.location.href=\'' + @{/admin/create-user} + '\''">
+						Add New User
+					</button>
+					
 					</div>
 				</nav>
 			</div>

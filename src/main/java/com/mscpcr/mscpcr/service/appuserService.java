@@ -1,46 +1,91 @@
 package com.mscpcr.mscpcr.service;
 
-
-import com.mscpcr.mscpcr.entity.appuser;
-import com.mscpcr.mscpcr.entity.appuser.Usertype;
-import com.mscpcr.mscpcr.repository.appuserRepository;
+import com.mscpcr.mscpcr.entity.AppUser;
+import com.mscpcr.mscpcr.entity.AppUser.Usertype;
+import com.mscpcr.mscpcr.repository.AppUserRepository;
+import com.mscpcr.mscpcr.repository.DistrictRepository;
+import com.mscpcr.mscpcr.util.PasswordUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder; 
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
-public class appuserService {
-    private final appuserRepository appuserRepository;
+public class AppUserService {
+    private final AppUserRepository appuserRepository;
+    private final DistrictRepository districtRepository;
 
-    public appuserService(appuserRepository appuserRepository) {
+    public AppUserService(AppUserRepository appuserRepository,
+                         DistrictRepository districtRepository) {
         this.appuserRepository = appuserRepository;
+        this.districtRepository = districtRepository;
     }
 
-    public appuser createUser(appuser user) {
-        // Password is already hashed before reaching service (handled in controller)
+    public AppUser createUser(AppUser user) {
+        // Validate username uniqueness
+        if (usernameExists(user.getUsername())) {
+            throw new IllegalArgumentException("Username already exists");
+        }
+
+        // Validate district-userType combination
+        if (user.getDistrict() != null && 
+            districtUserTypeExists(user.getDistrict().getId(), user.getUsertype())) {
+            throw new IllegalArgumentException(user.getUsertype() + " user already exists for this district");
+        }
+
+        // Hash password before saving
+        user.setPasswordhash(PasswordUtil.hashPassword(user.getPasswordhash()));
+        
         return appuserRepository.save(user);
     }
 
-    public Optional<appuser> getUserById(Long id) {
+    public boolean validateCredentials(String username, String rawPassword) {
+        Optional<AppUser> user = appuserRepository.findByUsername(username);
+        return user.isPresent() && 
+               PasswordUtil.checkPassword(rawPassword, user.get().getPasswordhash());
+    }
+
+    public Optional<AppUser> getUserById(Long id) {
         return appuserRepository.findById(id);
     }
 
-    public Optional<appuser> getUserByUsername(String username) {
+    public Optional<AppUser> getUserByUsername(String username) {
         return appuserRepository.findByUsername(username);
     }
 
-    public List<appuser> getUsersByType(Usertype userType) {
+    public List<AppUser> getUsersByType(Usertype userType) {
         return appuserRepository.findByUsertype(userType);
     }
 
-    public List<appuser> getUsersByDistrict(Long districtId) {
+    public List<AppUser> getUsersByDistrict(Long districtId) {
         return appuserRepository.findByDistrictId(districtId);
     }
+    
+    public List<AppUser> getUsersByDistrictAndType(Long districtId, Usertype userType) {
+        return appuserRepository.findByDistrictIdAndUsertype(districtId, userType);
+    }
 
-    public appuser updateUser(appuser user) {
+    public AppUser updateUser(AppUser user) {
+        // Prevent changing to existing username
+        Optional<AppUser> existingUser = appuserRepository.findByUsername(user.getUsername());
+        if (existingUser.isPresent() && !existingUser.get().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("Username already exists");
+        }
+
+        // If password was changed, hash the new one
+        if (user.getPasswordhash() != null && !user.getPasswordhash().isEmpty()) {
+            String currentHash = appuserRepository.findById(user.getId())
+                .map(AppUser::getPasswordhash)
+                .orElse("");
+            
+            if (!PasswordUtil.checkPassword(user.getPasswordhash(), currentHash)) {
+                user.setPasswordhash(PasswordUtil.hashPassword(user.getPasswordhash()));
+            }
+        }
+        
         return appuserRepository.save(user);
     }
 
@@ -50,5 +95,16 @@ public class appuserService {
 
     public boolean usernameExists(String username) {
         return appuserRepository.existsByUsername(username);
+    }
+    
+    public boolean districtUserTypeExists(Long districtId, Usertype userType) {
+        return appuserRepository.existsByDistrictIdAndUsertype(districtId, userType);
+    }
+    
+    public boolean isUniqueDistrictUserTypeCombination(Long districtId, Usertype userType, Long excludeUserId) {
+        if (excludeUserId == null) {
+            return !districtUserTypeExists(districtId, userType);
+        }
+        return !appuserRepository.existsByDistrictIdAndUsertypeAndIdNot(districtId, userType, excludeUserId);
     }
 }

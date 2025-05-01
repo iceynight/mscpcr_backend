@@ -17,14 +17,14 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "casehistory")
-public class casehistory {
+public class CaseHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @ManyToOne
     @JoinColumn(name = "caseid", nullable = false)
-    private legalcase legalcase;
+    private LegalCase legalcase;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -39,7 +39,7 @@ public class casehistory {
     
     @ManyToOne
     @JoinColumn(name = "actionby", nullable = false)
-    private appuser actionby;
+    private AppUser actionby;
     
     @CreationTimestamp
     private LocalDateTime actionat;
@@ -69,11 +69,11 @@ public class casehistory {
         this.id = id;
     }
 
-    public legalcase getlegalcase() {
+    public LegalCase getlegalcase() {
         return legalcase;
     }
 
-    public void setlegalcase(legalcase legalcase) {
+    public void setlegalcase(LegalCase legalcase) {
         this.legalcase = legalcase;
     }
 
@@ -101,11 +101,11 @@ public class casehistory {
         this.tostage = tostage;
     }
 
-    public appuser getActionby() {
+    public AppUser getActionby() {
         return actionby;
     }
 
-    public void setActionby(appuser actionby) {
+    public void setActionby(AppUser actionby) {
         this.actionby = actionby;
     }
 

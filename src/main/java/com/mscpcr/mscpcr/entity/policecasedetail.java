@@ -19,14 +19,14 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "policecasedetail")
-public class policecasedetail {
+public class PoliceCaseDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @OneToOne
     @JoinColumn(name = "caseid", nullable = false)
-    private legalcase legalcase;
+    private LegalCase legalcase;
     
     @Column(nullable = false)
     private String policestation;
@@ -58,15 +58,15 @@ public class policecasedetail {
     
     @ManyToOne
     @JoinColumn(name = "forwardedby")
-    private appuser forwardedby;
+    private AppUser forwardedby;
     
     @ManyToOne
     @JoinColumn(name = "solvedby")
-    private appuser solvedby;
+    private AppUser solvedby;
     
     @ManyToOne
     @JoinColumn(name = "updatedby", nullable = false)
-    private appuser updatedby;
+    private AppUser updatedby;
     
     @UpdateTimestamp
     private LocalDateTime updatedat;
@@ -86,11 +86,11 @@ public enum policecasestatus {
         this.id = id;
     }
 
-    public legalcase getlegalcase() {
+    public LegalCase getlegalcase() {
         return legalcase;
     }
 
-    public void setlegalcase(legalcase legalcase) {
+    public void setlegalcase(LegalCase legalcase) {
         this.legalcase = legalcase;
     }
 
@@ -190,27 +190,27 @@ public enum policecasestatus {
         this.solvedat = solvedat;
     }
 
-    public appuser getForwardedby() {
+    public AppUser getForwardedby() {
         return forwardedby;
     }
 
-    public void setForwardedby(appuser forwardedby) {
+    public void setForwardedby(AppUser forwardedby) {
         this.forwardedby = forwardedby;
     }
 
-    public appuser getSolvedby() {
+    public AppUser getSolvedby() {
         return solvedby;
     }
 
-    public void setSolvedby(appuser solvedby) {
+    public void setSolvedby(AppUser solvedby) {
         this.solvedby = solvedby;
     }
 
-    public appuser getUpdatedby() {
+    public AppUser getUpdatedby() {
         return updatedby;
     }
 
-    public void setUpdatedby(appuser updatedby) {
+    public void setUpdatedby(AppUser updatedby) {
         this.updatedby = updatedby;
     }
 

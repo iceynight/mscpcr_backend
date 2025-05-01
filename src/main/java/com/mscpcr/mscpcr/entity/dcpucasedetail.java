@@ -16,14 +16,14 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "dcpucasedetail")
-public class dcpucasedetail {
+public class DcpuCaseDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @OneToOne
     @JoinColumn(name = "caseid", nullable = false)
-    private legalcase legalcase;
+    private LegalCase legalcase;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -41,11 +41,11 @@ public class dcpucasedetail {
     
     @ManyToOne
     @JoinColumn(name = "forwardedby")
-    private appuser forwardedby;
+    private AppUser forwardedby;
     
     @ManyToOne
     @JoinColumn(name = "solvedby")
-    private appuser solvedby;
+    private AppUser solvedby;
     
     // Enum for DCPU actions
 public enum dcpuaction {
@@ -76,11 +76,11 @@ public enum caseprogress {
         this.id = id;
     }
 
-    public legalcase getlegalcase() {
+    public LegalCase getlegalcase() {
         return legalcase;
     }
 
-    public void setlegalcase(legalcase legalcase) {
+    public void setlegalcase(LegalCase legalcase) {
         this.legalcase = legalcase;
     }
 
@@ -132,19 +132,19 @@ public enum caseprogress {
         this.solvedat = solvedat;
     }
 
-    public appuser getForwardedby() {
+    public AppUser getForwardedby() {
         return forwardedby;
     }
 
-    public void setForwardedby(appuser forwardedby) {
+    public void setForwardedby(AppUser forwardedby) {
         this.forwardedby = forwardedby;
     }
 
-    public appuser getSolvedby() {
+    public AppUser getSolvedby() {
         return solvedby;
     }
 
-    public void setSolvedby(appuser solvedby) {
+    public void setSolvedby(AppUser solvedby) {
         this.solvedby = solvedby;
     }
 }

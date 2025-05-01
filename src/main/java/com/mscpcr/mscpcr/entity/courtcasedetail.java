@@ -20,14 +20,14 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "courtcasedetail")
-public class courtcasedetail {
+public class CourtCaseDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @OneToOne
     @JoinColumn(name = "caseid", nullable = false)
-    private legalcase legalcase;
+    private LegalCase legalcase;
     
     @Column(nullable = false)
     private String statevs;
@@ -58,11 +58,11 @@ public class courtcasedetail {
     
     @ManyToOne
     @JoinColumn(name = "closedby")
-    private appuser closedby;
+    private AppUser closedby;
     
     @ManyToOne
     @JoinColumn(name = "updatedby", nullable = false)
-    private appuser updatedby;
+    private AppUser updatedby;
     
     @UpdateTimestamp
     private LocalDateTime updatedat;
@@ -76,11 +76,11 @@ public class courtcasedetail {
         this.id = id;
     }
 
-    public legalcase getLegalcase() {
+    public LegalCase getLegalcase() {
         return legalcase;
     }
 
-    public void setLegalcase(legalcase legalcase) {
+    public void setLegalcase(LegalCase legalcase) {
         this.legalcase = legalcase;
     }
 
@@ -164,19 +164,19 @@ public class courtcasedetail {
         this.amountawarded = amountawarded;
     }
 
-    public appuser getClosedby() {
+    public AppUser getClosedby() {
         return closedby;
     }
 
-    public void setClosedby(appuser closedby) {
+    public void setClosedby(AppUser closedby) {
         this.closedby = closedby;
     }
 
-    public appuser getUpdatedby() {
+    public AppUser getUpdatedby() {
         return updatedby;
     }
 
-    public void setUpdatedby(appuser updatedby) {
+    public void setUpdatedby(AppUser updatedby) {
         this.updatedby = updatedby;
     }
 

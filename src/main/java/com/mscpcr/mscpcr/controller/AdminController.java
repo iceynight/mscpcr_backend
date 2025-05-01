@@ -2,20 +2,37 @@ package com.mscpcr.mscpcr.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class AdminController {
 
-    // Mapping for the Admin Dashboard page
     @GetMapping("/admin-dashboard")
     public String dashboard() {
-        return "admin-dashboard";  // Thymeleaf will look for admin-dashboard.html
+        return "admin-dashboard";
     }
+    
 
-    // Mapping for the Create User page
-    @GetMapping("/admin-dashboard/admin-create-user")
+    
+    @GetMapping("/admin/create-user")
     public String createUserPage() {
-        return "admin-create-user";  // This corresponds to admin-create-user.html
+        return "admin-create-user"; 
     }
+    @PostMapping("/admin/create-user")
+public String registerUser(
+    @RequestParam String district,
+    @RequestParam String userType,
+    @RequestParam String username,
+    @RequestParam String password,
+    RedirectAttributes redirectAttributes) {
+
+    // TODO: Save user logic here
+
+    redirectAttributes.addFlashAttribute("message", "User registered successfully!");
+    return "redirect:/admin-dashboard";
+}
+
 }
 

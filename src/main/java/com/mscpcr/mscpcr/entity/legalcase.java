@@ -21,7 +21,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "legalcase")
-public class legalcase {
+public class LegalCase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -80,7 +80,7 @@ public class legalcase {
     
     @ManyToOne
     @JoinColumn(name = "createdby", nullable = false)
-    private appuser createdby;
+    private AppUser createdby;
     
     @CreationTimestamp
     private LocalDateTime createdat;
@@ -91,7 +91,7 @@ public class legalcase {
     private LocalDateTime solvedat;
     @ManyToOne
     @JoinColumn(name = "district_id") // matches your database column
-    private district district;
+    private District district;
     
     // Getters and setters
     public enum Gender {
@@ -253,11 +253,11 @@ public class legalcase {
         this.currentstatus = currentstatus;
     }
 
-    public appuser getCreatedby() {
+    public AppUser getCreatedby() {
         return createdby;
     }
 
-    public void setCreatedby(appuser createdby) {
+    public void setCreatedby(AppUser createdby) {
         this.createdby = createdby;
     }
 
@@ -284,11 +284,11 @@ public class legalcase {
     public void setSolvedat(LocalDateTime solvedat) {
         this.solvedat = solvedat;
     }
-    public district getDistrict() {
+    public District getDistrict() {
         return district;
     }
 
-    public void setDistrict(district district) {
+    public void setDistrict(District district) {
         this.district = district;
     }
 

@@ -2,8 +2,8 @@ package com.mscpcr.mscpcr.service;
 
 
 
-import com.mscpcr.mscpcr.entity.casehistory;
-import com.mscpcr.mscpcr.repository.casehistoryRepository;
+import com.mscpcr.mscpcr.entity.CaseHistory;
+import com.mscpcr.mscpcr.repository.CaseHistoryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,22 +11,22 @@ import java.util.List;
 
 @Service
 @Transactional
-public class casehistoryService {
-    private final casehistoryRepository casehistoryRepository;
+public class CaseHistoryService {
+    private final CaseHistoryRepository casehistoryRepository;
 
-    public casehistoryService(casehistoryRepository casehistoryRepository) {
+    public CaseHistoryService(CaseHistoryRepository casehistoryRepository) {
         this.casehistoryRepository = casehistoryRepository;
     }
 
-    public casehistory createCaseHistory(casehistory history) {
+    public CaseHistory createCaseHistory(CaseHistory history) {
         return casehistoryRepository.save(history);
     }
 
-    public List<casehistory> getHistoryByCaseId(Long caseId) {
+    public List<CaseHistory> getHistoryByCaseId(Long caseId) {
         return casehistoryRepository.findBylegalcaseIdOrderByActionatDesc(caseId);
     }
 
-    public List<casehistory> getHistoryByUserId(Long userId) {
+    public List<CaseHistory> getHistoryByUserId(Long userId) {
         return casehistoryRepository.findByActionbyId(userId);
     }
 }

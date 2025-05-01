@@ -1,8 +1,8 @@
 package com.mscpcr.mscpcr.service;
 
 
-import com.mscpcr.mscpcr.entity.district;
-import com.mscpcr.mscpcr.repository.districtRepository;
+import com.mscpcr.mscpcr.entity.District;
+import com.mscpcr.mscpcr.repository.DistrictRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,30 +11,30 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class districtService {
-    private final districtRepository districtRepository;
+public class DistrictService {
+    private final DistrictRepository districtRepository;
 
-    public districtService(districtRepository districtRepository) {
+    public DistrictService(DistrictRepository districtRepository) {
         this.districtRepository = districtRepository;
     }
 
-    public district createDistrict(district district) {
+    public District createDistrict(District district) {
         return districtRepository.save(district);
     }
 
-    public List<district> getAllDistricts() {
+    public List<District> getAllDistricts() {
         return districtRepository.findAll();
     }
 
-    public Optional<district> getDistrictById(Long id) {
+    public Optional<District> getDistrictById(Long id) {
         return districtRepository.findById(id);
     }
 
-    public Optional<district> getDistrictByCode(String code) {
+    public Optional<District> getDistrictByCode(String code) {
         return districtRepository.findByCode(code);
     }
 
-    public district updateDistrict(district district) {
+    public District updateDistrict(District district) {
         return districtRepository.save(district);
     }
 
