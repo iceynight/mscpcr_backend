@@ -1,17 +1,30 @@
 package com.mscpcr.mscpcr.controller;
 
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.mscpcr.mscpcr.entity.AppUser;
+import com.mscpcr.mscpcr.repository.AppUserRepository;
+
 @Controller
 public class LoginController {
 
+    @Autowired
+    private AppUserRepository appUserRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @GetMapping("/login")
     public String loginPage() {
-        return "login"; 
+        return "login";
     }
 
     @PostMapping("/login")
@@ -22,27 +35,35 @@ public class LoginController {
             @RequestParam String captchaToken,
             RedirectAttributes redirectAttributes) {
 
-        if (!"admin".equals(username)) {
-            redirectAttributes.addAttribute("error", "Invalid username");
+        Optional<AppUser> optionalUser = appUserRepository.findByUsername(username);
+
+        if (optionalUser.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Invalid username");
             return "redirect:/login";
         }
 
-        if (!"admin123".equals(password)) {
-            redirectAttributes.addAttribute("error", "Invalid password");
+        AppUser user = optionalUser.get();
+
+        if (!passwordEncoder.matches(password, user.getPasswordhash())) {
+            redirectAttributes.addFlashAttribute("error", "Invalid password");
             return "redirect:/login";
         }
 
         if (!captcha.equalsIgnoreCase(captchaToken)) {
-            redirectAttributes.addAttribute("error", "Captcha does not match");
+            redirectAttributes.addFlashAttribute("error", "Captcha does not match");
             return "redirect:/login";
         }
 
-        return "redirect:/admin/dashboard";
+        if (user.getUsertype().toString().equalsIgnoreCase("admin")) {
+            return "redirect:/admin/dashboard";
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Access denied");
+            return "redirect:/login";
+        }
     }
 
     @GetMapping("/admin/dashboard")
     public String dashboard() {
         return "admin-dashboard";
     }
-    
 }

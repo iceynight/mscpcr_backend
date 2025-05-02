@@ -2,7 +2,6 @@ package com.mscpcr.mscpcr.entity;
 
 import java.time.LocalDateTime;
 
-
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
@@ -14,7 +13,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-
 import jakarta.persistence.Table;
 
 @Entity
@@ -46,6 +44,8 @@ public class AppUser {
     @ManyToOne
     @JoinColumn(name = "createdby")
     private AppUser createdby;
+
+
     
     // Getters and setters
     public enum Usertype {
