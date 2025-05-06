@@ -34,14 +34,12 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        // .requestMatchers("/", "/user/verifyOtp", "/fetchFee/**", "/static/**", "/css/**", "/javascript/**", "/bootstrap/**", "/img/**").permitAll()
-                        // .requestMatchers("/audit", "/establishments", "/edit-establishments", "/establishments/edit/{id}", "/create-establishments", "/establishments/show").hasAnyRole("ADMIN", "DCPU", "POLICE", "COURT")
                         .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers("/ws/**").permitAll()
-                        .requestMatchers("/admin-dashboard").hasRole("admin")
-                        .requestMatchers("/dcpuPage").hasRole("dcpu")
-                        .requestMatchers("/policePage").hasRole("police")
-                        .requestMatchers("/courtPage").hasRole("court")
+                        .requestMatchers("/admin-dashboard").hasAuthority("admin")
+                        .requestMatchers("/dcpuPage").hasAuthority("dcpu")
+                        .requestMatchers("/policePage").hasAuthority("police")
+                        .requestMatchers("/courtPage").hasAuthority("court")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
@@ -70,10 +68,10 @@ public class WebSecurityConfig {
                                 } else if (roles.contains("court")) {
                                     response.sendRedirect("/courtPage");
                                 } else {
-                                    response.sendRedirect("/userpage");
+                                    response.sendRedirect("/login?error=true");
                                 }
                             } else {
-                                response.sendRedirect("/login");
+                                response.sendRedirect("/login?error=true");
                             }
                         })
                 );
@@ -102,7 +100,7 @@ public class WebSecurityConfig {
                     } else if (roles.contains("court")) {
                         response.sendRedirect("/courtPage");
                     } else {
-                        response.sendRedirect("/userpage");
+                        response.sendRedirect("/login?error=true");
                     }
                 }
             }
