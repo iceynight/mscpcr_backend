@@ -36,17 +36,21 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         // .requestMatchers("/", "/user/verifyOtp", "/fetchFee/**", "/static/**", "/css/**", "/javascript/**", "/bootstrap/**", "/img/**").permitAll()
                         // .requestMatchers("/audit", "/establishments", "/edit-establishments", "/establishments/edit/{id}", "/create-establishments", "/establishments/show").hasAnyRole("ADMIN", "DCPU", "POLICE", "COURT")
-                        .requestMatchers("/admin-dashboard").hasRole("ADMIN")
-                        .requestMatchers("/dcpuPage").hasRole("DCPU")
-                        .requestMatchers("/policePage").hasRole("POLICE")
-                        .requestMatchers("/courtPage").hasRole("COURT")
+                        .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+                        .requestMatchers("/ws/**").permitAll()
+                        .requestMatchers("/admin-dashboard").hasRole("admin")
+                        .requestMatchers("/dcpuPage").hasRole("dcpu")
+                        .requestMatchers("/policePage").hasRole("police")
+                        .requestMatchers("/courtPage").hasRole("court")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
-                        .loginPage("/login")
-                        .successHandler(authenticationSuccessHandler())
-                        .usernameParameter("username")
-                        .passwordParameter("password")
+                        .loginPage("/login") // Custom login page
+                        .loginProcessingUrl("/login") // URL to submit the login form
+                        .successHandler(authenticationSuccessHandler()) // Handle successful login
+                        .failureUrl("/login?error=true") // Redirect on login failure
+                        .usernameParameter("username") // Match the form field name
+                        .passwordParameter("password") // Match the form field name
                         .permitAll()
                 )
                 .logout(LogoutConfigurer::permitAll)
@@ -57,13 +61,13 @@ public class WebSecurityConfig {
                             if (authentication != null) {
                                 Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
 
-                                if (roles.contains("ROLE_ADMIN")) {
+                                if (roles.contains("admin")) {
                                     response.sendRedirect("/admin-dashboard");
-                                } else if (roles.contains("ROLE_DCPU")) {
+                                } else if (roles.contains("dcpu")) {
                                     response.sendRedirect("/dcpuPage");
-                                } else if (roles.contains("ROLE_POLICE")) {
+                                } else if (roles.contains("police")) {
                                     response.sendRedirect("/policePage");
-                                } else if (roles.contains("ROLE_COURT")) {
+                                } else if (roles.contains("court")) {
                                     response.sendRedirect("/courtPage");
                                 } else {
                                     response.sendRedirect("/userpage");
@@ -89,13 +93,13 @@ public class WebSecurityConfig {
                 if (authentication != null) {
                     Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
 
-                    if (roles.contains("ROLE_ADMIN")) {
+                    if (roles.contains("admin")) {
                         response.sendRedirect("/admin-dashboard");
-                    } else if (roles.contains("ROLE_DCPU")) {
+                    } else if (roles.contains("dcpu")) {
                         response.sendRedirect("/dcpuPage");
-                    } else if (roles.contains("ROLE_POLICE")) {
+                    } else if (roles.contains("police")) {
                         response.sendRedirect("/policePage");
-                    } else if (roles.contains("ROLE_COURT")) {
+                    } else if (roles.contains("court")) {
                         response.sendRedirect("/courtPage");
                     } else {
                         response.sendRedirect("/userpage");

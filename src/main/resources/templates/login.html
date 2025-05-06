@@ -11,7 +11,7 @@
 <div class="hidden lg:flex lg:w-1/2 items-center justify-center bg-white p-4 lg:p-12"
      style="background-image: url('/images/bg.jpg'); background-size: cover; background-position: center;">
   <div class="max-w-md w-full text-center">
-    <img src="images/child.png" alt="Logo" class="w-32 h-32 lg:w-60 lg:h-60 object-contain mx-auto mb-8">
+    <img src="/images/child.png" alt="Logo" class="w-32 h-32 lg:w-60 lg:h-60 object-contain mx-auto mb-8">
     <h1 class="text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900">
       Meghalaya State Commission for Protection of Child Rights
     </h1>
@@ -59,13 +59,14 @@
           Login
         </button>
       </form>
+
     </div>
   </div>
 </div>
 
 <script>
   function generateCaptcha() {
-    const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    const chars = "0123456789";
     let text = "";
     for (let i = 0; i < 6; i++) {
       text += chars.charAt(Math.floor(Math.random() * chars.length));
