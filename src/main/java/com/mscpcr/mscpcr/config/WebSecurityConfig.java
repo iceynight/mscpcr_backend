@@ -35,20 +35,19 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-                        .requestMatchers("/ws/**").permitAll()
-                        .requestMatchers("/admin-dashboard").hasAuthority("admin")
-                        .requestMatchers("/dcpuPage").hasAuthority("dcpu")
-                        .requestMatchers("/policePage").hasAuthority("police")
-                        .requestMatchers("/courtPage").hasAuthority("court")
+                        .requestMatchers("/admin-dashboard").hasAuthority("ADMIN")
+                        .requestMatchers("/dcpuPage").hasAuthority("DCPU")
+                        .requestMatchers("/policePage").hasAuthority("POLICE")
+                        .requestMatchers("/courtPage").hasAuthority("COURT")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
-                        .loginPage("/login") // Custom login page
-                        .loginProcessingUrl("/login") // URL to submit the login form
-                        .successHandler(authenticationSuccessHandler()) // Handle successful login
-                        .failureUrl("/login?error=true") // Redirect on login failure
-                        .usernameParameter("username") // Match the form field name
-                        .passwordParameter("password") // Match the form field name
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .successHandler(authenticationSuccessHandler())
+                        .failureUrl("/login?error=true")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
                         .permitAll()
                 )
                 .logout(LogoutConfigurer::permitAll)
@@ -59,13 +58,13 @@ public class WebSecurityConfig {
                             if (authentication != null) {
                                 Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
 
-                                if (roles.contains("admin")) {
+                                if (roles.contains("ADMIN")) {
                                     response.sendRedirect("/admin-dashboard");
-                                } else if (roles.contains("dcpu")) {
+                                } else if (roles.contains("DCPU")) {
                                     response.sendRedirect("/dcpuPage");
-                                } else if (roles.contains("police")) {
+                                } else if (roles.contains("POLICE")) {
                                     response.sendRedirect("/policePage");
-                                } else if (roles.contains("court")) {
+                                } else if (roles.contains("COURT")) {
                                     response.sendRedirect("/courtPage");
                                 } else {
                                     response.sendRedirect("/login?error=true");
@@ -91,13 +90,13 @@ public class WebSecurityConfig {
                 if (authentication != null) {
                     Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
 
-                    if (roles.contains("admin")) {
+                    if (roles.contains("ADMIN")) {
                         response.sendRedirect("/admin-dashboard");
-                    } else if (roles.contains("dcpu")) {
+                    } else if (roles.contains("DCPU")) {
                         response.sendRedirect("/dcpuPage");
-                    } else if (roles.contains("police")) {
+                    } else if (roles.contains("POLICE")) {
                         response.sendRedirect("/policePage");
-                    } else if (roles.contains("court")) {
+                    } else if (roles.contains("COURT")) {
                         response.sendRedirect("/courtPage");
                     } else {
                         response.sendRedirect("/login?error=true");

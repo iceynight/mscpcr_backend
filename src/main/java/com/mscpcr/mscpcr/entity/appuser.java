@@ -49,8 +49,9 @@ public class AppUser {
     
     // Getters and setters
     public enum Usertype {
-        admin, dcpu, police, court
+        ADMIN, DCPU, POLICE, COURT
     }
+    
 
     public Long getId() {
         return id;

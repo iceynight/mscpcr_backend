@@ -29,20 +29,17 @@ public class AppUserService {
     }
 
     public AppUser createUser(AppUser user) {
-        // Validate username uniqueness
         if (usernameExists(user.getUsername())) {
-            throw new IllegalArgumentException("Username already exists");
+            throw new IllegalArgumentException("Username already exists.");
         }
 
-        // Validate district-userType combination
         if (user.getDistrict() != null &&
             districtUserTypeExists(user.getDistrict().getId(), user.getUsertype())) {
-            throw new IllegalArgumentException(user.getUsertype() + " user already exists for this district");
+            throw new IllegalArgumentException("A user with type '" + user.getUsertype() +
+                "' already exists in district: " + user.getDistrict().getName());
         }
 
-        // Hash password before saving
         user.setPasswordhash(passwordEncoder.encode(user.getPasswordhash()));
-
         return appuserRepository.save(user);
     }
 
@@ -73,21 +70,30 @@ public class AppUserService {
     }
 
     public AppUser updateUser(AppUser user) {
-        // Prevent changing to existing username
-        Optional<AppUser> existingUser = appuserRepository.findByUsername(user.getUsername());
-        if (existingUser.isPresent() && !existingUser.get().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("Username already exists");
+        AppUser existingUser = appuserRepository.findById(user.getId())
+            .orElseThrow(() -> new IllegalArgumentException("User not found."));
+
+        // Prevent changing to an existing username
+        if (!existingUser.getUsername().equals(user.getUsername()) &&
+            usernameExists(user.getUsername())) {
+            throw new IllegalArgumentException("Username already exists.");
         }
 
-        // If password was changed, hash the new one
-        if (user.getPasswordhash() != null && !user.getPasswordhash().isEmpty()) {
-            String currentHash = appuserRepository.findById(user.getId())
-                    .map(AppUser::getPasswordhash)
-                    .orElse("");
-
-            if (!passwordEncoder.matches(user.getPasswordhash(), currentHash)) {
-                user.setPasswordhash(passwordEncoder.encode(user.getPasswordhash()));
+        // Check for unique (district, usertype) if changed
+        if (user.getDistrict() != null &&
+            (!user.getDistrict().getId().equals(existingUser.getDistrict().getId()) ||
+             !user.getUsertype().equals(existingUser.getUsertype()))) {
+            if (districtUserTypeExists(user.getDistrict().getId(), user.getUsertype())) {
+                throw new IllegalArgumentException("A user with type '" + user.getUsertype() +
+                    "' already exists in district: " + user.getDistrict().getName());
             }
+        }
+
+        // Update password if provided
+        if (user.getPasswordhash() != null && !user.getPasswordhash().isEmpty()) {
+            user.setPasswordhash(passwordEncoder.encode(user.getPasswordhash()));
+        } else {
+            user.setPasswordhash(existingUser.getPasswordhash());
         }
 
         return appuserRepository.save(user);

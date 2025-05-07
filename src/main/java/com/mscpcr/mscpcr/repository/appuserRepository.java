@@ -19,7 +19,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     boolean existsByUsername(String username);
     boolean existsByDistrictIdAndUsertype(Long districtId, Usertype usertype);
     
-    boolean existsByDistrictIdAndUsertypeAndIdNot(Long districtId, Usertype usertype, Long id);
+    boolean existsByDistrictIdAndUsertypeAndIdNot(Long districtId, Usertype usertype, Long excludeUserId);
     
     List<AppUser> findByDistrictIdAndUsertype(Long districtId, Usertype usertype);
 }
