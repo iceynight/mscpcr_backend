@@ -38,7 +38,32 @@ public class UserController {
         }
         return "dcpu-dashboard";
     }
-    
+    @GetMapping("/police-dashboard")
+    public String policeDashboard(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            String username = authentication.getName();
+            AppUser user = userService.getUserByUsername(username).orElse(null);
+            model.addAttribute("user", user);
+        } else {
+            model.addAttribute("user", null);
+        }
+        return "police-dashboard";
+    }
+    @GetMapping("/court-dashboard")
+    public String courtDashboard(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            String username = authentication.getName();
+            AppUser user = userService.getUserByUsername(username).orElse(null);
+            model.addAttribute("user", user);
+        } else {
+            model.addAttribute("user", null);
+        }
+        return "court-dashboard";
+    }
+
+
     @PostMapping("/register")
     public String registerUser(@RequestParam String username,
                              @RequestParam String rawPassword) {

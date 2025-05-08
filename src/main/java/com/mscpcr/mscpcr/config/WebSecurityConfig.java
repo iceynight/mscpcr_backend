@@ -37,8 +37,8 @@ public class WebSecurityConfig {
                         .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers("/admin-dashboard").hasAuthority("ADMIN")
                         .requestMatchers("/dcpu-dashboard").hasAuthority("DCPU")
-                        .requestMatchers("/policePage").hasAuthority("POLICE")
-                        .requestMatchers("/courtPage").hasAuthority("COURT")
+                        .requestMatchers("/police-dashboard").hasAuthority("POLICE")
+                        .requestMatchers("/court-dashboard").hasAuthority("COURT")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
@@ -63,9 +63,9 @@ public class WebSecurityConfig {
                                 } else if (roles.contains("DCPU")) {
                                     response.sendRedirect("/dcpu-dashboard");
                                 } else if (roles.contains("POLICE")) {
-                                    response.sendRedirect("/policePage");
+                                    response.sendRedirect("/police-dashboard");
                                 } else if (roles.contains("COURT")) {
-                                    response.sendRedirect("/courtPage");
+                                    response.sendRedirect("/court-dashboard");
                                 } else {
                                     response.sendRedirect("/login?error=true");
                                 }
@@ -95,9 +95,9 @@ public class WebSecurityConfig {
                     } else if (roles.contains("DCPU")) {
                         response.sendRedirect("/dcpu-dashboard");
                     } else if (roles.contains("POLICE")) {
-                        response.sendRedirect("/policePage");
+                        response.sendRedirect("/police-dashboard");
                     } else if (roles.contains("COURT")) {
-                        response.sendRedirect("/courtPage");
+                        response.sendRedirect("/court-dashboard");
                     } else {
                         response.sendRedirect("/login?error=true");
                     }
