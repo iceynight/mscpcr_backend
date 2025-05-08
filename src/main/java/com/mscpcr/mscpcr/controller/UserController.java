@@ -1,13 +1,17 @@
 package com.mscpcr.mscpcr.controller;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mscpcr.mscpcr.entity.AppUser;
 import com.mscpcr.mscpcr.service.AppUserService;
-
 
 @Controller
 public class UserController {
@@ -19,6 +23,20 @@ public class UserController {
                         PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @GetMapping("/dcpu-dashboard")
+    public String dcpuDashboard(Model model) {
+        // Retrieve the currently authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            String username = authentication.getName(); // Get the username of the logged-in user
+            AppUser user = userService.getUserByUsername(username).orElse(null); // Fetch user details from the database
+            model.addAttribute("user", user); // Add user to the model
+        } else {
+            model.addAttribute("user", null); // Add null if no user is authenticated
+        }
+        return "dcpu-dashboard";
     }
     
     @PostMapping("/register")

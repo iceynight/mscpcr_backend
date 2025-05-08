@@ -52,6 +52,9 @@ public class AppUser {
         ADMIN, DCPU, POLICE, COURT
     }
     
+    public Usertype getUserType() { //custom getter for thymeleaf
+        return usertype;
+    }
 
     public Long getId() {
         return id;

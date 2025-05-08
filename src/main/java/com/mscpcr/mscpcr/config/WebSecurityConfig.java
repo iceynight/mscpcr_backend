@@ -36,7 +36,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers("/admin-dashboard").hasAuthority("ADMIN")
-                        .requestMatchers("/dcpuPage").hasAuthority("DCPU")
+                        .requestMatchers("/dcpu-dashboard").hasAuthority("DCPU")
                         .requestMatchers("/policePage").hasAuthority("POLICE")
                         .requestMatchers("/courtPage").hasAuthority("COURT")
                         .anyRequest().authenticated()
@@ -61,7 +61,7 @@ public class WebSecurityConfig {
                                 if (roles.contains("ADMIN")) {
                                     response.sendRedirect("/admin-dashboard");
                                 } else if (roles.contains("DCPU")) {
-                                    response.sendRedirect("/dcpuPage");
+                                    response.sendRedirect("/dcpu-dashboard");
                                 } else if (roles.contains("POLICE")) {
                                     response.sendRedirect("/policePage");
                                 } else if (roles.contains("COURT")) {
@@ -93,7 +93,7 @@ public class WebSecurityConfig {
                     if (roles.contains("ADMIN")) {
                         response.sendRedirect("/admin-dashboard");
                     } else if (roles.contains("DCPU")) {
-                        response.sendRedirect("/dcpuPage");
+                        response.sendRedirect("/dcpu-dashboard");
                     } else if (roles.contains("POLICE")) {
                         response.sendRedirect("/policePage");
                     } else if (roles.contains("COURT")) {

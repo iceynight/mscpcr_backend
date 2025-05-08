@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>DCPU Dashboard</title>
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+	<link rel="stylesheet" th:href="@{/css/demo.css}">
+	<link rel="stylesheet" th:href="@{/css/ready.css}">
+	<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+	<div class="wrapper">
+		<div class="main-header">
+			<div class="logo-header">
+				<a href="#" class="logo">DCPU Dashboard</a>
+				<button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<button class="topbar-toggler more"><i class="la la-ellipsis-v"></i></button>
+			</div>
+			<nav class="navbar navbar-header navbar-expand-lg">
+				<div class="container-fluid">
+					<span class="navbar-text ml-auto font-weight-bold">
+						User: <span th:text="${user.username}"></span> |
+						Type: <span th:text="${user.userType}"></span> |
+						District Code: <span th:text="${user.district.code}"></span> |
+						District: <span th:text="${user.district.name}"></span>
+					</span>
+				</div>
+			</nav>
+		</div>
+
+		<div class="sidebar">
+			<div class="scrollbar-inner sidebar-wrapper">
+				<div class="user">
+					<div class="photo">
+						<img th:src="@{/assets/img/profile.jpg}">
+					</div>
+					<div class="info">
+						<span>
+							<span th:text="${user.username}">User</span>
+							<span class="user-level" th:text="${user.userType}">User Type</span>
+						</span>
+					</div>
+				</div>
+
+				<ul class="nav">
+					<li class="nav-item active">
+						<a href="#" th:href="@{/user/dashboard}">
+							<i class="la la-dashboard"></i>
+							<p>Dashboard</p>
+						</a>
+					</li>
+					<!-- Add role-specific links here -->
+					<li class="nav-item">
+						<a href="#">
+							<i class="la la-user"></i>
+							<p>Profile</p>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a href="#">
+							<i class="la la-cog"></i>
+							<p>Settings</p>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a th:href="@{/logout}">
+							<i class="la la-sign-out"></i>
+							<p>Logout</p>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="main-panel">
+			<div class="content">
+				<div class="container-fluid">
+					<h4 class="page-title">Welcome to the DCPU Dashboard</h4>
+					<p>Welcome, <span th:text="${user != null ? user.username : 'Guest'}"></span>!</p>
+					<p>User Type: <span th:text="${user != null ? user.usertype : 'Guest'}"></span></p>
+					<!-- Add content or role-specific panels here -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Scripts -->
+	<script th:src="@{/js/core/jquery.3.2.1.min.js}"></script>
+	<script th:src="@{/js/core/bootstrap.min.js}"></script>
+	<script th:src="@{/js/ready.min.js}"></script>
+</body>
+</html>
