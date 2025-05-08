@@ -2,8 +2,6 @@ package com.mscpcr.mscpcr.controller;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,10 +13,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.mscpcr.mscpcr.dto.CaseFormWrapper;
 import com.mscpcr.mscpcr.entity.AppUser;
-import com.mscpcr.mscpcr.entity.District;
+import com.mscpcr.mscpcr.entity.DcpuCaseDetail;
 import com.mscpcr.mscpcr.entity.LegalCase;
-import com.mscpcr.mscpcr.repository.DistrictRepository;
+import com.mscpcr.mscpcr.repository.DcpuCaseDetailRepository;
 import com.mscpcr.mscpcr.repository.LegalCaseRepository;
 import com.mscpcr.mscpcr.service.AppUserService;
 
@@ -30,38 +29,59 @@ public class LegalCaseController {
     private LegalCaseRepository legalCaseRepository;
 
     @Autowired
-    private AppUserService AppUserService;
+    private DcpuCaseDetailRepository dcpuCaseDetailRepository;
 
     @Autowired
-    private DistrictRepository districtRepository;
-
-    @PostMapping("/add")
-    public String addCase(@Validated @ModelAttribute LegalCase legalCase, BindingResult bindingResult, Principal principal, Model model) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("districts", districtRepository.findAll());
-            return "dcpu-add-case"; // return form with errors and districts
-        }
-
-        if (principal == null) {
-            throw new IllegalStateException("No authenticated user found.");
-        }
-
-        AppUser currentUser = AppUserService.getUserByUsername(principal.getName())
-                .orElseThrow(() -> new IllegalArgumentException("User not found: " + principal.getName()));
-        legalCase.setCreatedby(currentUser);
-        legalCase.setCaseuuid(UUID.randomUUID().toString());
-        legalCase.setCreatedat(LocalDateTime.now());
-        legalCase.setUpdatedat(LocalDateTime.now());
-
-        legalCaseRepository.save(legalCase);
-        return "redirect:/dcpu-dashboard";
-    }
+    private AppUserService appUserService;
 
     @GetMapping("/dcpu-add-case")
     public String showAddCaseForm(Model model) {
-        model.addAttribute("legalCase", new LegalCase());
-        List<District> districts = districtRepository.findAll();
-        model.addAttribute("districts", districts);
+        // Load a blank form
+        model.addAttribute("caseForm", new CaseFormWrapper());
         return "dcpu-add-case";
+    }
+
+    @PostMapping("/add")
+    public String addCase(@Validated @ModelAttribute("caseForm") CaseFormWrapper caseForm, 
+                          BindingResult bindingResult, 
+                          Principal principal, 
+                          Model model) {
+        // Handle validation errors
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("caseForm", caseForm); // Retain the form data
+            return "dcpu-add-case"; // Return form with errors
+        }
+
+        // Check if the Principal is null
+        if (principal == null) {
+            model.addAttribute("error", "No authenticated user found.");
+            return "dcpu-add-case";
+        }
+
+        // Fetch the logged-in user
+        AppUser currentUser = appUserService.getUserByUsername(principal.getName())
+                .orElseThrow(() -> new IllegalArgumentException("Authenticated user not found."));
+
+        // Save LegalCase
+        LegalCase legalCase = caseForm.getLegalCase();
+        legalCase.setCreatedby(currentUser);
+        legalCase.setCreatedat(LocalDateTime.now());
+        legalCase.setUpdatedat(LocalDateTime.now());
+        legalCaseRepository.save(legalCase);
+
+        // Save DcpuCaseDetail
+        DcpuCaseDetail dcpuCaseDetail = caseForm.getDcpuCaseDetail();
+        dcpuCaseDetail.setLegalCase(legalCase); // Link LegalCase
+        dcpuCaseDetail.setCreatedby(currentUser);
+        dcpuCaseDetail.setForwardedby(currentUser); // Set forwardedby only if applicable
+        dcpuCaseDetail.setSolvedby(null); // Set solvedby to null initially
+        dcpuCaseDetail.setCreatedat(LocalDateTime.now());
+        dcpuCaseDetail.setUpdatedat(LocalDateTime.now());
+        dcpuCaseDetail.setForwardedat(null); // Set forwardedat to null initially
+        dcpuCaseDetail.setSolvedat(null); // Set solvedat to null initially
+        dcpuCaseDetailRepository.save(dcpuCaseDetail);
+
+        // Redirect to dashboard
+        return "redirect:/dcpu-dashboard";
     }
 }

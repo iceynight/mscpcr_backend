@@ -46,6 +46,22 @@ public class DcpuCaseDetail {
     @ManyToOne
     @JoinColumn(name = "solvedby")
     private AppUser solvedby;
+
+    public void setLegalCase(LegalCase legalCase) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setCreatedat(LocalDateTime now) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setCreatedby(AppUser currentUser) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setUpdatedat(LocalDateTime now) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
     
     // Enum for DCPU actions
 public enum dcpuaction {

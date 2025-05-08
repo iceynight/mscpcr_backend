@@ -1,140 +1,77 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Add New Case</title>
+    <title>Add Legal Case</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+    <h1>Add Legal Case</h1>
+    <form th:action="@{/cases/add}" method="post" th:object="${caseForm}">
+        <!-- LegalCase Fields -->
+        <label for="slno">Serial Number:</label>
+        <input type="text" id="slno" th:field="*{legalCase.slno}" required />
+        <br />
 
-<div class="container mt-5">
-    <h2 class="mb-4">Add New Legal Case</h2>
+        <label for="complainantname">Complainant Name:</label>
+        <input type="text" id="complainantname" th:field="*{legalCase.complainantname}" required />
+        <br />
 
-    <form th:action="@{/cases/add}" th:object="${legalCase}" method="post">
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Serial No</label>
-            <div class="col-sm-10">
-                <input type="text" th:field="*{slno}" class="form-control" required>
-                <div class="text-danger" th:if="${#fields.hasErrors('slno')}" th:errors="*{slno}"></div>
-            </div>
-        </div>
+        <label for="childname">Child Name:</label>
+        <input type="text" id="childname" th:field="*{legalCase.childname}" required />
+        <br />
 
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Date of Complaint</label>
-            <div class="col-sm-10">
-                <input type="date" th:field="*{dateofcomplaint}" class="form-control" required>
-            </div>
-        </div>
+        <label for="childage">Child Age:</label>
+        <input type="number" id="childage" th:field="*{legalCase.childage}" required />
+        <br />
 
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Date of Receipt</label>
-            <div class="col-sm-10">
-                <input type="date" th:field="*{dateofreceipt}" class="form-control" required>
-            </div>
-        </div>
+        <label for="childgender">Child Gender:</label>
+        <select id="childgender" th:field="*{legalCase.childgender}" required>
+            <option value="MALE">Male</option>
+            <option value="FEMALE">Female</option>
+            <option value="OTHER">Other</option>
+        </select>
+        <br />
 
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Complainant Name</label>
-            <div class="col-sm-10">
-                <input type="text" th:field="*{complainantname}" class="form-control" required>
-            </div>
-        </div>
+        <label for="casesummary">Case Summary:</label>
+        <textarea id="casesummary" th:field="*{legalCase.casesummary}" required></textarea>
+        <br />
 
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Child Name</label>
-            <div class="col-sm-10">
-                <input type="text" th:field="*{childname}" class="form-control" required>
-            </div>
-        </div>
+        <label for="incidentplace">Incident Place:</label>
+        <input type="text" id="incidentplace" th:field="*{legalCase.incidentplace}" required />
+        <br />
 
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Child Age</label>
-            <div class="col-sm-10">
-                <input type="number" th:field="*{childage}" class="form-control" required min="0" max="18">
-            </div>
-        </div>
+        <label for="incidentdatetime">Incident Date & Time:</label>
+        <input type="datetime-local" id="incidentdatetime" th:field="*{legalCase.incidentdatetime}" required />
+        <br />
 
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Child Gender</label>
-            <div class="col-sm-10">
-                <select th:field="*{childgender}" class="form-select" required>
-                    <option value="">-- Select Gender --</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
-                </select>
-            </div>
-        </div>
+        <label for="casetype">Case Type:</label>
+        <input type="text" id="casetype" th:field="*{legalCase.casetype}" required />
+        <br />
 
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Case Summary</label>
-            <div class="col-sm-10">
-                <textarea th:field="*{casesummary}" class="form-control" rows="3" required></textarea>
-            </div>
-        </div>
+        <!-- DcpuCaseDetail Fields -->
+        <label for="actionbycwc">Action by CWC:</label>
+        <input type="text" id="actionbycwc" th:field="*{dcpuCaseDetail.actionbycwc}" required />
+        <br />
 
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Incident Date & Time</label>
-            <div class="col-sm-10">
-                <input type="datetime-local" th:field="*{incidentdatetime}" class="form-control" required>
-            </div>
-        </div>
+        <label for="caseprogress">Case Progress:</label>
+        <select id="caseprogress" th:field="*{dcpuCaseDetail.caseprogress}" required>
+            <option value="OPEN">Open</option>
+            <option value="IN_PROGRESS">In Progress</option>
+            <option value="CLOSED">Closed</option>
+        </select>
+        <br />
 
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Incident Place</label>
-            <div class="col-sm-10">
-                <input type="text" th:field="*{incidentplace}" class="form-control" required>
-            </div>
-        </div>
+        <label for="isforwardedtopolice">Forwarded to Police:</label>
+        <input type="checkbox" id="isforwardedtopolice" th:field="*{dcpuCaseDetail.isforwardedtopolice}" />
+        <br />
 
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Accused Relationship</label>
-            <div class="col-sm-10">
-                <input type="text" th:field="*{accusedrelationship}" class="form-control">
-            </div>
-        </div>
+        <label for="issolved">Solved:</label>
+        <input type="checkbox" id="issolved" th:field="*{dcpuCaseDetail.issolved}" />
+        <br />
 
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Has Disability?</label>
-            <div class="col-sm-10">
-                <input type="checkbox" th:field="*{hasdisability}" class="form-check-input">
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Disability Type</label>
-            <div class="col-sm-10">
-                <input type="text" th:field="*{disabilitytype}" class="form-control">
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Case Type</label>
-            <div class="col-sm-10">
-                <input type="text" th:field="*{casetype}" class="form-control" required>
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Action by CWC</label>
-            <div class="col-sm-10">
-                <textarea th:field="*{actionbycwc}" class="form-control" rows="2"></textarea>
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Additional Info</label>
-            <div class="col-sm-10">
-                <textarea th:field="*{additionalinfo}" class="form-control" rows="2"></textarea>
-            </div>
-        </div>
-
-        <div class="text-end">
-            <button type="submit" class="btn btn-success">Submit Case</button>
-            <a href="/dcpu-dashboard" class="btn btn-secondary">Cancel</a>
-        </div>
+        <!-- Buttons -->
+        <button type="submit">Submit</button>
+        <a href="/dcpu-dashboard"><button type="button">Cancel</button></a>
     </form>
-</div>
-
 </body>
 </html>
