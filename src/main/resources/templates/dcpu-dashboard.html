@@ -80,6 +80,9 @@
 					<h4 class="page-title">Welcome to the DCPU Dashboard</h4>
 					<p>Welcome, <span th:text="${user != null ? user.username : 'Guest'}"></span></p>
 					<p>User Type: <span th:text="${user != null ? user.usertype : 'Guest'}"></span></p>
+                    <a th:href="@{/cases/dcpu-add-case}" class="btn btn-primary mt-3">
+                        <i class="la la-plus-circle"></i> Add New Case
+                    </a>
 					<!-- Add content or role-specific panels here -->
 				</div>
 			</div>
