@@ -3,8 +3,11 @@ package com.mscpcr.mscpcr.controller;
 import java.security.Principal;
 import java.time.LocalDateTime;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -17,7 +20,6 @@ import com.mscpcr.mscpcr.dto.CaseFormWrapper;
 import com.mscpcr.mscpcr.entity.AppUser;
 import com.mscpcr.mscpcr.entity.DcpuCaseDetail;
 import com.mscpcr.mscpcr.entity.LegalCase;
-import com.mscpcr.mscpcr.repository.DcpuCaseDetailRepository;
 import com.mscpcr.mscpcr.repository.LegalCaseRepository;
 import com.mscpcr.mscpcr.service.AppUserService;
 
@@ -25,63 +27,73 @@ import com.mscpcr.mscpcr.service.AppUserService;
 @RequestMapping("/cases")
 public class LegalCaseController {
 
-    @Autowired
-    private LegalCaseRepository legalCaseRepository;
+    private static final Logger logger = LoggerFactory.getLogger(LegalCaseController.class);
 
     @Autowired
-    private DcpuCaseDetailRepository dcpuCaseDetailRepository;
+    private LegalCaseRepository legalCaseRepository;
 
     @Autowired
     private AppUserService appUserService;
 
     @GetMapping("/dcpu-add-case")
     public String showAddCaseForm(Model model) {
-        // Load a blank form
         model.addAttribute("caseForm", new CaseFormWrapper());
         return "dcpu-add-case";
     }
 
     @PostMapping("/add")
-    public String addCase(@Validated @ModelAttribute("caseForm") CaseFormWrapper caseForm, 
-                          BindingResult bindingResult, 
-                          Principal principal, 
-                          Model model) {
-        // Handle validation errors
+    @Transactional
+    public String addCase(@Validated @ModelAttribute("caseForm") CaseFormWrapper caseForm,
+                         BindingResult bindingResult,
+                         Principal principal,
+                         Model model) {
+
+        logger.info("Received form data: {}", caseForm);
+
         if (bindingResult.hasErrors()) {
-            model.addAttribute("caseForm", caseForm); // Retain the form data
-            return "dcpu-add-case"; // Return form with errors
+            logger.error("Validation errors: {}", bindingResult.getAllErrors());
+            return "dcpu-add-case";
         }
 
-        // Check if the Principal is null
         if (principal == null) {
+            logger.error("No authenticated user found.");
             model.addAttribute("error", "No authenticated user found.");
             return "dcpu-add-case";
         }
 
-        // Fetch the logged-in user
-        AppUser currentUser = appUserService.getUserByUsername(principal.getName())
-                .orElseThrow(() -> new IllegalArgumentException("Authenticated user not found."));
+        try {
+            // Fetch the logged-in user
+            AppUser currentUser = appUserService.getUserByUsername(principal.getName())
+                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        // Save LegalCase
-        LegalCase legalCase = caseForm.getLegalCase();
-        legalCase.setCreatedby(currentUser);
-        legalCase.setCreatedat(LocalDateTime.now());
-        legalCase.setUpdatedat(LocalDateTime.now());
-        legalCaseRepository.save(legalCase);
+            // Prepare LegalCase
+            LegalCase legalCase = caseForm.getLegalCase();
+            legalCase.setCreatedby(currentUser);
+            legalCase.setCreatedat(LocalDateTime.now());
+            legalCase.setUpdatedat(LocalDateTime.now());
 
-        // Save DcpuCaseDetail
-        DcpuCaseDetail dcpuCaseDetail = caseForm.getDcpuCaseDetail();
-        dcpuCaseDetail.setLegalCase(legalCase); // Link LegalCase
-        dcpuCaseDetail.setCreatedby(currentUser);
-        dcpuCaseDetail.setForwardedby(currentUser); // Set forwardedby only if applicable
-        dcpuCaseDetail.setSolvedby(null); // Set solvedby to null initially
-        dcpuCaseDetail.setCreatedat(LocalDateTime.now());
-        dcpuCaseDetail.setUpdatedat(LocalDateTime.now());
-        dcpuCaseDetail.setForwardedat(null); // Set forwardedat to null initially
-        dcpuCaseDetail.setSolvedat(null); // Set solvedat to null initially
-        dcpuCaseDetailRepository.save(dcpuCaseDetail);
+            // Prepare DcpuCaseDetail
+            DcpuCaseDetail dcpuCaseDetail = caseForm.getDcpuCaseDetail();
+            dcpuCaseDetail.setActionbycwc(caseForm.getDcpuCaseDetail().getActionbycwc());
+            dcpuCaseDetail.setCaseprogress(caseForm.getDcpuCaseDetail().getCaseprogress());
+            dcpuCaseDetail.setCreatedby(currentUser);
+            dcpuCaseDetail.setCreatedat(LocalDateTime.now());
+            dcpuCaseDetail.setUpdatedat(LocalDateTime.now());
 
-        // Redirect to dashboard
-        return "redirect:/dcpu-dashboard";
+            // Set bidirectional relationship
+            legalCase.setDcpuCaseDetail(dcpuCaseDetail);
+            dcpuCaseDetail.setLegalcase(legalCase);
+
+            // Save the LegalCase (cascade will save DcpuCaseDetail)
+            legalCaseRepository.save(legalCase);
+
+            logger.info("Case saved successfully with ID: {}", legalCase.getId());
+            return "redirect:/dcpu-dashboard";
+
+        } catch (Exception e) {
+            logger.error("Error saving case", e);
+            model.addAttribute("error", "Failed to save case: " + e.getMessage());
+            return "dcpu-add-case";
+        }
     }
 }

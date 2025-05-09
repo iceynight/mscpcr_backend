@@ -1,77 +1,149 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Add Legal Case</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>DCPU Dashboard</title>
+        <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+        <link rel="stylesheet" th:href="@{/css/demo.css}">
+        <link rel="stylesheet" th:href="@{/css/ready.css}">
+        <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    </head>
 <body>
-    <h1>Add Legal Case</h1>
-    <form th:action="@{/cases/add}" method="post" th:object="${caseForm}">
-        <!-- LegalCase Fields -->
-        <label for="slno">Serial Number:</label>
-        <input type="text" id="slno" th:field="*{legalCase.slno}" required />
-        <br />
+    <div class="container mt-5">
+        <h2>Add New Case</h2>
+        <form action="#" th:action="@{/cases/add}" th:object="${caseForm}" method="post">
+            
+            <!-- Serial No -->
+            <div class="mb-3">
+                <label for="slno" class="form-label">Serial No</label>
+                <input type="text" id="slno" class="form-control" th:field="*{legalCase.slno}" required>
+            </div>
 
-        <label for="complainantname">Complainant Name:</label>
-        <input type="text" id="complainantname" th:field="*{legalCase.complainantname}" required />
-        <br />
+            <!-- Date of Complaint -->
+            <div class="mb-3">
+                <label for="dateofcomplaint" class="form-label">Date of Complaint</label>
+                <input type="date" id="dateofcomplaint" class="form-control" th:field="*{legalCase.dateofcomplaint}" required>
+            </div>
 
-        <label for="childname">Child Name:</label>
-        <input type="text" id="childname" th:field="*{legalCase.childname}" required />
-        <br />
+            <!-- Date of Receipt -->
+            <div class="mb-3">
+                <label for="dateofreceipt" class="form-label">Date of Receipt</label>
+                <input type="date" id="dateofreceipt" class="form-control" th:field="*{legalCase.dateofreceipt}" required>
+            </div>
 
-        <label for="childage">Child Age:</label>
-        <input type="number" id="childage" th:field="*{legalCase.childage}" required />
-        <br />
+            <!-- Complainant Name -->
+            <div class="mb-3">
+                <label for="complainantname" class="form-label">Complainant Name</label>
+                <input type="text" id="complainantname" class="form-control" th:field="*{legalCase.complainantname}" required>
+            </div>
 
-        <label for="childgender">Child Gender:</label>
-        <select id="childgender" th:field="*{legalCase.childgender}" required>
-            <option value="MALE">Male</option>
-            <option value="FEMALE">Female</option>
-            <option value="OTHER">Other</option>
-        </select>
-        <br />
+            <!-- Child Name -->
+            <div class="mb-3">
+                <label for="childname" class="form-label">Child's Name</label>
+                <input type="text" id="childname" class="form-control" th:field="*{legalCase.childname}" required>
+            </div>
 
-        <label for="casesummary">Case Summary:</label>
-        <textarea id="casesummary" th:field="*{legalCase.casesummary}" required></textarea>
-        <br />
+            <!-- Child Age -->
+            <div class="mb-3">
+                <label for="childage" class="form-label">Child's Age</label>
+                <input type="number" id="childage" class="form-control" th:field="*{legalCase.childage}" required>
+            </div>
 
-        <label for="incidentplace">Incident Place:</label>
-        <input type="text" id="incidentplace" th:field="*{legalCase.incidentplace}" required />
-        <br />
+            <!-- Child Gender -->
+            <div class="mb-3">
+                <label for="childgender" class="form-label">Child's Gender</label>
+                <select class="form-control" th:field="*{legalCase.childgender}" required>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
 
-        <label for="incidentdatetime">Incident Date & Time:</label>
-        <input type="datetime-local" id="incidentdatetime" th:field="*{legalCase.incidentdatetime}" required />
-        <br />
+            <!-- Case Summary -->
+            <div class="mb-3">
+                <label for="casesummary" class="form-label">Case Summary</label>
+                <textarea id="casesummary" class="form-control" th:field="*{legalCase.casesummary}" rows="4" required></textarea>
+            </div>
 
-        <label for="casetype">Case Type:</label>
-        <input type="text" id="casetype" th:field="*{legalCase.casetype}" required />
-        <br />
+            <!-- Incident Date & Time -->
+            <div class="mb-3">
+                <label for="incidentdatetime" class="form-label">Date and Time of Incident</label>
+                <input type="datetime-local" id="incidentdatetime" class="form-control" th:field="*{legalCase.incidentdatetime}" required>
+            </div>
 
-        <!-- DcpuCaseDetail Fields -->
-        <label for="actionbycwc">Action by CWC:</label>
-        <input type="text" id="actionbycwc" th:field="*{dcpuCaseDetail.actionbycwc}" required />
-        <br />
+            <!-- Incident Place -->
+            <div class="mb-3">
+                <label for="incidentplace" class="form-label">Place of Incident</label>
+                <input type="text" id="incidentplace" class="form-control" th:field="*{legalCase.incidentplace}" required>
+            </div>
 
-        <label for="caseprogress">Case Progress:</label>
-        <select id="caseprogress" th:field="*{dcpuCaseDetail.caseprogress}" required>
-            <option value="OPEN">Open</option>
-            <option value="IN_PROGRESS">In Progress</option>
-            <option value="CLOSED">Closed</option>
-        </select>
-        <br />
+            <!-- Accused Relationship -->
+            <div class="mb-3">
+                <label for="accusedrelationship" class="form-label">Accused Relationship with Victim</label>
+                <input type="text" id="accusedrelationship" class="form-control" th:field="*{legalCase.accusedrelationship}">
+            </div>
 
-        <label for="isforwardedtopolice">Forwarded to Police:</label>
-        <input type="checkbox" id="isforwardedtopolice" th:field="*{dcpuCaseDetail.isforwardedtopolice}" />
-        <br />
+            <!-- Disability Yes/No -->
+            <div class="mb-3">
+                <label for="hasdisability" class="form-label">Does the Child Have a Disability?</label>
+                <select class="form-control" th:field="*{legalCase.hasdisability}">
+                    <option value="false">No</option>
+                    <option value="true">Yes</option>
+                </select>
+            </div>
 
-        <label for="issolved">Solved:</label>
-        <input type="checkbox" id="issolved" th:field="*{dcpuCaseDetail.issolved}" />
-        <br />
+            <!-- Disability Type (If Yes) -->
+            <div class="mb-3" th:if="${caseForm.legalCase.hasdisability}">
+                <label for="disabilitytype" class="form-label">Type of Disability</label>
+                <input type="text" id="disabilitytype" class="form-control" th:field="*{legalCase.disabilitytype}">
+            </div>
 
-        <!-- Buttons -->
-        <button type="submit">Submit</button>
-        <a href="/dcpu-dashboard"><button type="button">Cancel</button></a>
-    </form>
+            <!-- Case Type -->
+            <div class="mb-3">
+                <label for="casetype" class="form-label">Case Type</label>
+                <input type="text" id="casetype" class="form-control" th:field="*{legalCase.casetype}" required>
+            </div>
+
+            <!-- Action by CWC -->
+            <div class="mb-3">
+                <label for="actionbycwc" class="form-label">Action by CWC</label>
+                <select class="form-control" th:field="*{dcpuCaseDetail.actionbycwc}">
+                    <option value="DISPOSED">Disposed</option>
+                    <option value="UNDER_SUPERVISION">Under Supervision</option>
+                    <option value="TRANSFERRED">Transferred</option>
+                </select>
+            </div>
+
+            <!-- Case Progress -->
+            <div class="mb-3">
+                <label for="caseprogress" class="form-label">Case Progress</label>
+                <select class="form-control" th:field="*{dcpuCaseDetail.caseprogress}">
+                    <option value="SIR">SIR</option>
+                    <option value="Councelling">Councelling</option>
+                    <option value="Medical_Exam">Medical Exam</option>
+                    <option value="Mental_Assessment">Mental Assessment</option>
+                    <option value="Institutional_Care">Institutional Care</option>
+                    <option value="NonInstitutional_Care">Non-Institutional Care</option>
+                    <option value="Sponsorship">Sponsorship</option>
+                    <option value="Foster_Care">Foster Care</option>
+                    <option value="Aftercare">Aftercare</option>
+                    <option value="Adoption">Adoption</option>
+                </select>
+            </div>
+
+            <!-- Additional Info -->
+            <div class="mb-3">
+                <label for="additionalinfo" class="form-label">Additional Information</label>
+                <textarea id="additionalinfo" class="form-control" th:field="*{legalCase.additionalinfo}" rows="4"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/core/jquery.3.2.1.min.js}"></script>
+	<script th:src="@{/js/core/bootstrap.min.js}"></script>
+	<script th:src="@{/js/ready.min.js}"></script>
 </body>
 </html>

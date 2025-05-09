@@ -1,17 +1,18 @@
 package com.mscpcr.mscpcr.service;
 
 
-import com.mscpcr.mscpcr.entity.LegalCase;
-import com.mscpcr.mscpcr.entity.LegalCase.Casestatus;
-import com.mscpcr.mscpcr.repository.LegalCaseRepository;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import com.mscpcr.mscpcr.entity.LegalCase;
+import com.mscpcr.mscpcr.entity.LegalCase.Casestatus;
+import com.mscpcr.mscpcr.repository.LegalCaseRepository;
 
 @Service
 @Transactional
@@ -57,4 +58,6 @@ public class LegalCaseService {
     public void deleteCase(Long id) {
         legalcaseRepository.deleteById(id);
     }
+
+    
 }

@@ -2,6 +2,9 @@ package com.mscpcr.mscpcr.entity;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,16 +16,21 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "dcpucasedetail")
+@Getter
+@Setter
 public class DcpuCaseDetail {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @OneToOne
-    @JoinColumn(name = "caseid", nullable = false)
+    @JoinColumn(name = "caseid", nullable = false)  // Matches your actual DB column name
     private LegalCase legalcase;
     
     @Enumerated(EnumType.STRING)
@@ -33,7 +41,10 @@ public class DcpuCaseDetail {
     @Column(nullable = false)
     private caseprogress caseprogress;
     
+    @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean isforwardedtopolice = false;
+    
+    @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean issolved = false;
     
     private LocalDateTime forwardedat;
@@ -46,122 +57,62 @@ public class DcpuCaseDetail {
     @ManyToOne
     @JoinColumn(name = "solvedby")
     private AppUser solvedby;
-
-    public void setLegalCase(LegalCase legalCase) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setCreatedat(LocalDateTime now) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setCreatedby(AppUser currentUser) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setUpdatedat(LocalDateTime now) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
     
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdat;
+    
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private LocalDateTime updatedat;
+    
+    @ManyToOne
+    @JoinColumn(name = "createdby", nullable = false)
+    private AppUser createdby;
+
     // Enum for DCPU actions
-public enum dcpuaction {
-    DISPOSED,           // Case is solved and sent to admin
-    UNDER_SUPERVISION,  // Case remains with DCPU
-    TRANSFERRED         // Case is forwarded to police
-}
-
-// Enum for case progress options
-public enum caseprogress {
-    SIR,
-    Councelling,
-    Medical_Exam,
-    Mental_Assessment,
-    Institutional_Care,
-    NonInstitutional_Care,
-    Sponsorship,
-    Foster_Care,
-    Aftercare,
-    Adoption
-}
-    // Getters and setters
-    public Long getId() {
-        return id;
+    public enum dcpuaction {
+        DISPOSED,           // Case is solved and sent to admin
+        UNDER_SUPERVISION,  // Case remains with DCPU
+        TRANSFERRED         // Case is forwarded to police
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    // Enum for case progress options
+    public enum caseprogress {
+        SIR,
+        Councelling,
+        Medical_Exam,
+        Mental_Assessment,
+        Institutional_Care,
+        NonInstitutional_Care,
+        Sponsorship,
+        Foster_Care,
+        Aftercare,
+        Adoption
     }
 
-    public LegalCase getlegalcase() {
-        return legalcase;
-    }
-
-    public void setlegalcase(LegalCase legalcase) {
+    // Properly implemented methods (previously throwing UnsupportedOperationException)
+    public void setLegalcase(LegalCase legalcase) {
         this.legalcase = legalcase;
     }
 
-    public dcpuaction getActionbycwc() {
-        return actionbycwc;
+    public void setCreatedat(LocalDateTime createdat) {
+        this.createdat = createdat;
     }
 
-    public void setActionbycwc(dcpuaction actionbycwc) {
-        this.actionbycwc = actionbycwc;
+    public void setCreatedby(AppUser createdby) {
+        this.createdby = createdby;
     }
 
-    public caseprogress getCaseprogress() {
-        return caseprogress;
+    public void setUpdatedat(LocalDateTime updatedat) {
+        this.updatedat = updatedat;
     }
 
-    public void setCaseprogress(caseprogress caseprogress) {
-        this.caseprogress = caseprogress;
-    }
-
-    public boolean isIsforwardedtopolice() {
-        return isforwardedtopolice;
-    }
-
-    public void setIsforwardedtopolice(boolean isforwardedtopolice) {
-        this.isforwardedtopolice = isforwardedtopolice;
-    }
-
-    public boolean isIssolved() {
-        return issolved;
-    }
-
-    public void setIssolved(boolean issolved) {
-        this.issolved = issolved;
-    }
-
-    public LocalDateTime getForwardedat() {
-        return forwardedat;
-    }
-
-    public void setForwardedat(LocalDateTime forwardedat) {
-        this.forwardedat = forwardedat;
-    }
-
-    public LocalDateTime getSolvedat() {
-        return solvedat;
-    }
-
-    public void setSolvedat(LocalDateTime solvedat) {
-        this.solvedat = solvedat;
-    }
-
-    public AppUser getForwardedby() {
-        return forwardedby;
-    }
-
-    public void setForwardedby(AppUser forwardedby) {
-        this.forwardedby = forwardedby;
-    }
-
-    public AppUser getSolvedby() {
-        return solvedby;
-    }
-
-    public void setSolvedby(AppUser solvedby) {
-        this.solvedby = solvedby;
+    // Helper method to establish the relationship
+    public void associateWithLegalCase(LegalCase legalCase) {
+        this.setLegalcase(legalCase);
+        if (legalCase != null) {
+            legalCase.setDcpuCaseDetail(this);
+        }
     }
 }
-
