@@ -17,7 +17,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "casehistory")
-public class CaseHistory {
+public class CaseHistory{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
