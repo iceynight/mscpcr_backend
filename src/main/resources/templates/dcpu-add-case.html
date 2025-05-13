@@ -16,43 +16,43 @@
             <!-- Serial No -->
             <div class="mb-3">
                 <label for="slno" class="form-label">Serial No</label>
-                <input type="text" id="slno" class="form-control" th:field="*{legalCase.slno}" required>
+                <input type="text" id="slno" class="form-control" th:field="*{legalcase.slno}" required>
             </div>
 
             <!-- Date of Complaint -->
             <div class="mb-3">
                 <label for="dateofcomplaint" class="form-label">Date of Complaint</label>
-                <input type="date" id="dateofcomplaint" class="form-control" th:field="*{legalCase.dateofcomplaint}" required>
+                <input type="date" id="dateofcomplaint" class="form-control" th:field="*{legalcase.dateofcomplaint}" required>
             </div>
 
             <!-- Date of Receipt -->
             <div class="mb-3">
                 <label for="dateofreceipt" class="form-label">Date of Receipt</label>
-                <input type="date" id="dateofreceipt" class="form-control" th:field="*{legalCase.dateofreceipt}" required>
+                <input type="date" id="dateofreceipt" class="form-control" th:field="*{legalcase.dateofreceipt}" required>
             </div>
 
             <!-- Complainant Name -->
             <div class="mb-3">
                 <label for="complainantname" class="form-label">Complainant Name</label>
-                <input type="text" id="complainantname" class="form-control" th:field="*{legalCase.complainantname}" required>
+                <input type="text" id="complainantname" class="form-control" th:field="*{legalcase.complainantname}" required>
             </div>
 
             <!-- Child Name -->
             <div class="mb-3">
                 <label for="childname" class="form-label">Child's Name</label>
-                <input type="text" id="childname" class="form-control" th:field="*{legalCase.childname}" required>
+                <input type="text" id="childname" class="form-control" th:field="*{legalcase.childname}" required>
             </div>
 
             <!-- Child Age -->
             <div class="mb-3">
                 <label for="childage" class="form-label">Child's Age</label>
-                <input type="number" id="childage" class="form-control" th:field="*{legalCase.childage}" required>
+                <input type="number" id="childage" class="form-control" th:field="*{legalcase.childage}" required>
             </div>
 
             <!-- Child Gender -->
             <div class="mb-3">
                 <label for="childgender" class="form-label">Child's Gender</label>
-                <select class="form-control" th:field="*{legalCase.childgender}" required>
+                <select class="form-control" th:field="*{legalcase.childgender}" required>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                     <option value="other">Other</option>
@@ -62,46 +62,46 @@
             <!-- Case Summary -->
             <div class="mb-3">
                 <label for="casesummary" class="form-label">Case Summary</label>
-                <textarea id="casesummary" class="form-control" th:field="*{legalCase.casesummary}" rows="4" required></textarea>
+                <textarea id="casesummary" class="form-control" th:field="*{legalcase.casesummary}" rows="4" required></textarea>
             </div>
 
             <!-- Incident Date & Time -->
             <div class="mb-3">
                 <label for="incidentdatetime" class="form-label">Date and Time of Incident</label>
-                <input type="datetime-local" id="incidentdatetime" class="form-control" th:field="*{legalCase.incidentdatetime}" required>
+                <input type="datetime-local" id="incidentdatetime" class="form-control" th:field="*{legalcase.incidentdatetime}" required>
             </div>
 
             <!-- Incident Place -->
             <div class="mb-3">
                 <label for="incidentplace" class="form-label">Place of Incident</label>
-                <input type="text" id="incidentplace" class="form-control" th:field="*{legalCase.incidentplace}" required>
+                <input type="text" id="incidentplace" class="form-control" th:field="*{legalcase.incidentplace}" required>
             </div>
 
             <!-- Accused Relationship -->
             <div class="mb-3">
                 <label for="accusedrelationship" class="form-label">Accused Relationship with Victim</label>
-                <input type="text" id="accusedrelationship" class="form-control" th:field="*{legalCase.accusedrelationship}">
+                <input type="text" id="accusedrelationship" class="form-control" th:field="*{legalcase.accusedrelationship}">
             </div>
 
             <!-- Disability Yes/No -->
             <div class="mb-3">
                 <label for="hasdisability" class="form-label">Does the Child Have a Disability?</label>
-                <select class="form-control" th:field="*{legalCase.hasdisability}">
+                <select class="form-control" th:field="*{legalcase.hasdisability}">
                     <option value="false">No</option>
                     <option value="true">Yes</option>
                 </select>
             </div>
 
             <!-- Disability Type (If Yes) -->
-            <div class="mb-3" th:if="${caseForm.legalCase.hasdisability}">
+            <div class="mb-3" th:if="${caseForm.legalcase.hasdisability}">
                 <label for="disabilitytype" class="form-label">Type of Disability</label>
-                <input type="text" id="disabilitytype" class="form-control" th:field="*{legalCase.disabilitytype}">
+                <input type="text" id="disabilitytype" class="form-control" th:field="*{legalcase.disabilitytype}">
             </div>
 
             <!-- Case Type -->
             <div class="mb-3">
                 <label for="casetype" class="form-label">Case Type</label>
-                <input type="text" id="casetype" class="form-control" th:field="*{legalCase.casetype}" required>
+                <input type="text" id="casetype" class="form-control" th:field="*{legalcase.casetype}" required>
             </div>
 
             <!-- Action by CWC -->
@@ -134,7 +134,7 @@
             <!-- Additional Info -->
             <div class="mb-3">
                 <label for="additionalinfo" class="form-label">Additional Information</label>
-                <textarea id="additionalinfo" class="form-control" th:field="*{legalCase.additionalinfo}" rows="4"></textarea>
+                <textarea id="additionalinfo" class="form-control" th:field="*{legalcase.additionalinfo}" rows="4"></textarea>
             </div>
 
             <button type="submit" class="btn btn-primary">Submit</button>

@@ -28,7 +28,7 @@ public class CourtCaseDetailService {
         return courtCaseDetailRepository.save(courtCaseDetail);
     }
 
-    public Optional<CourtCaseDetail> findBylegalCaseId(Long caseId) {
+    public Optional<CourtCaseDetail> findBylegalcaseId(Long caseId) {
         return courtCaseDetailRepository.findBylegalcaseId(caseId);
     }
 

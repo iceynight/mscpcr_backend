@@ -27,7 +27,7 @@ public class CourtCaseDetail {
     
     @OneToOne
     @JoinColumn(name = "caseid", nullable = false)
-    private LegalCase legalcase;
+    private Legalcase legalcase;
     
     @Column(nullable = false)
     private String statevs;
@@ -76,11 +76,11 @@ public class CourtCaseDetail {
         this.id = id;
     }
 
-    public LegalCase getLegalcase() {
+    public Legalcase getLegalcase() {
         return legalcase;
     }
 
-    public void setLegalcase(LegalCase legalcase) {
+    public void setLegalcase(Legalcase legalcase) {
         this.legalcase = legalcase;
     }
 

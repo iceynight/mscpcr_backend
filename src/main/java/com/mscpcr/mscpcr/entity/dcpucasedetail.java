@@ -14,7 +14,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,9 +28,9 @@ public class DcpuCaseDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @OneToOne
-    @JoinColumn(name = "caseid", nullable = false)  // Matches your actual DB column name
-    private LegalCase legalcase;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "legalcase_id", nullable = false)
+    private Legalcase legalcase;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -92,7 +91,7 @@ public class DcpuCaseDetail {
     }
 
     // Properly implemented methods (previously throwing UnsupportedOperationException)
-    public void setLegalcase(LegalCase legalcase) {
+    public void setLegalcase(Legalcase legalcase) {
         this.legalcase = legalcase;
     }
 
@@ -109,10 +108,11 @@ public class DcpuCaseDetail {
     }
 
     // Helper method to establish the relationship
-    public void associateWithLegalCase(LegalCase legalCase) {
-        this.setLegalcase(legalCase);
-        if (legalCase != null) {
-            legalCase.setDcpuCaseDetail(this);
-        }
+    public void associateWithLegalcase(Legalcase legalcase) {
+        this.setLegalcase(legalcase);
+        // Remove the following line as Legalcase does not have setDcpuCaseDetail method
+        // if (legalcase != null) {
+        //     legalcase.setDcpuCaseDetail(this);
+        // }
     }
 }

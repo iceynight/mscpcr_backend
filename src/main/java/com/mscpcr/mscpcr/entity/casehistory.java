@@ -24,7 +24,7 @@ public class CaseHistory{
     
     @ManyToOne
     @JoinColumn(name = "caseid", nullable = false)
-    private LegalCase legalcase;
+    private Legalcase legalcase;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -69,11 +69,11 @@ public class CaseHistory{
         this.id = id;
     }
 
-    public LegalCase getlegalcase() {
+    public Legalcase getlegalcase() {
         return legalcase;
     }
 
-    public void setlegalcase(LegalCase legalcase) {
+    public void setlegalcase(Legalcase legalcase) {
         this.legalcase = legalcase;
     }
 

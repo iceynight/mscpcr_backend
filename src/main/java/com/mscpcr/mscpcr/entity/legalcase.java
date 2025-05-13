@@ -2,6 +2,8 @@ package com.mscpcr.mscpcr.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,7 +19,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -27,79 +29,90 @@ import lombok.Setter;
 @Table(name = "legalcase")
 @Getter
 @Setter
-public class LegalCase {
+public class Legalcase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(unique = true, nullable = false)
     private String caseuuid;
-    
+
     @Column(nullable = false)
     private String slno;
-    
+
     @Column(nullable = false)
     private LocalDate dateofcomplaint;
-    
+
     @Column(nullable = false)
     private LocalDate dateofreceipt;
-    
+
     @Column(nullable = false)
     private String complainantname;
-    
+
     @Column(nullable = false)
     private String childname;
-    
+
     @Column(nullable = false)
     private Integer childage;
-    
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Gender childgender;
-    
+
     @Column(nullable = false, columnDefinition = "TEXT")
     private String casesummary;
-    
+
     @Column(nullable = false)
     private LocalDateTime incidentdatetime;
-    
+
     @Column(nullable = false)
     private String incidentplace;
-    
+
     private String accusedrelationship;
-    
+
     private boolean hasdisability = false;
-    
+
     private String disabilitytype;
-    
+
     @Column(nullable = false)
     private String casetype;
-    
+
     @Column(columnDefinition = "TEXT")
     private String additionalinfo;
-    
+
     @Enumerated(EnumType.STRING)
     private Casestatus currentstatus = Casestatus.dcpuprocessing;
-    
+
     @ManyToOne
     @JoinColumn(name = "createdby", nullable = false)
     private AppUser createdby;
-    
+
     @CreationTimestamp
     private LocalDateTime createdat;
-    
+
     @UpdateTimestamp
     private LocalDateTime updatedat;
-    
+
     private LocalDateTime solvedat;
-    
+
     @ManyToOne
     @JoinColumn(name = "district_id")
     private District district;
-    
-    @OneToOne(mappedBy = "legalcase", cascade = CascadeType.ALL, orphanRemoval = true)
-    private DcpuCaseDetail dcpuCaseDetail;
+
+    @OneToMany(mappedBy = "legalcase", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DcpuCaseDetail> dcpuCaseDetails = new ArrayList<>();
+
+    /**
+     * Adds a DcpuCaseDetail to this Legalcase.
+     * Ensures the bidirectional relationship is maintained.
+     */
+    public void addDcpuCaseDetail(DcpuCaseDetail detail) {
+        if (detail != null) {
+            detail.setLegalcase(this); // Set owning side
+            this.dcpuCaseDetails.add(detail); // Set inverse side
+        }
+    }
 
     @PrePersist
     protected void onCreate() {
@@ -108,15 +121,10 @@ public class LegalCase {
         }
     }
 
-    public void addDcpuCaseDetail(DcpuCaseDetail detail) {
-        detail.setLegalcase(this);
-        this.dcpuCaseDetail = detail;
-    }
-
     public enum Gender {
         male, female, other
     }
-    
+
     public enum Casestatus {
         dcpuprocessing, policeprocessing, courtprocessing, solved, closed
     }

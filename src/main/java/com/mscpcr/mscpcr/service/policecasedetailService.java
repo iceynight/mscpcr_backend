@@ -23,7 +23,7 @@ public class PoliceCaseDetailService {
         return policeCaseDetailRepository.save(policeCaseDetail);
     }
 
-    public Optional<PoliceCaseDetail> findBylegalCaseId(Long caseId) {
+    public Optional<PoliceCaseDetail> findBylegalcaseId(Long caseId) {
         return policeCaseDetailRepository.findBylegalcaseId(caseId);
     }
 

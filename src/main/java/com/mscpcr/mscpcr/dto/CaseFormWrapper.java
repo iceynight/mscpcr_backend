@@ -1,19 +1,19 @@
 package com.mscpcr.mscpcr.dto;
 
 import com.mscpcr.mscpcr.entity.DcpuCaseDetail;
-import com.mscpcr.mscpcr.entity.LegalCase;
+import com.mscpcr.mscpcr.entity.Legalcase;
 
 public class CaseFormWrapper {
 
-    private LegalCase legalCase = new LegalCase();
+    private Legalcase legalcase = new Legalcase();
     private DcpuCaseDetail dcpuCaseDetail = new DcpuCaseDetail();
 
-    public LegalCase getLegalCase() {
-        return legalCase;
+    public Legalcase getLegalcase() {
+        return legalcase;
     }
 
-    public void setLegalCase(LegalCase legalCase) {
-        this.legalCase = legalCase;
+    public void setLegalcase(Legalcase legalcase) {
+        this.legalcase = legalcase;
     }
 
     public DcpuCaseDetail getDcpuCaseDetail() {

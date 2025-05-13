@@ -25,7 +25,7 @@ public class DcpuCaseDetailService {
         return dcpuCaseDetailRepository.save(dcpuCaseDetail);
     }
 
-    public Optional<DcpuCaseDetail> findByLegalCaseId(Long caseId) {
+    public Optional<DcpuCaseDetail> findByLegalcaseId(Long caseId) {
         return dcpuCaseDetailRepository.findBylegalcaseId(caseId);
     }
 

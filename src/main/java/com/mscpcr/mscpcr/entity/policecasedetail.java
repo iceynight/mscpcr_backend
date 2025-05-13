@@ -26,7 +26,7 @@ public class PoliceCaseDetail {
     
     @OneToOne
     @JoinColumn(name = "caseid", nullable = false)
-    private LegalCase legalcase;
+    private Legalcase legalcase;
     
     @Column(nullable = false)
     private String policestation;
@@ -86,11 +86,11 @@ public enum policecasestatus {
         this.id = id;
     }
 
-    public LegalCase getlegalcase() {
+    public Legalcase getlegalcase() {
         return legalcase;
     }
 
-    public void setlegalcase(LegalCase legalcase) {
+    public void setlegalcase(Legalcase legalcase) {
         this.legalcase = legalcase;
     }
 

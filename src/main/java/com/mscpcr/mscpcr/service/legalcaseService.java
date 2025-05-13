@@ -10,48 +10,48 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mscpcr.mscpcr.entity.LegalCase;
-import com.mscpcr.mscpcr.entity.LegalCase.Casestatus;
-import com.mscpcr.mscpcr.repository.LegalCaseRepository;
+import com.mscpcr.mscpcr.entity.Legalcase;
+import com.mscpcr.mscpcr.entity.Legalcase.Casestatus;
+import com.mscpcr.mscpcr.repository.LegalcaseRepository;
 
 @Service
 @Transactional
-public class LegalCaseService {
-    private final LegalCaseRepository legalcaseRepository;
+public class LegalcaseService {
+    private final LegalcaseRepository legalcaseRepository;
 
-    public LegalCaseService(LegalCaseRepository legalcaseRepository) {
+    public LegalcaseService(LegalcaseRepository legalcaseRepository) {
         this.legalcaseRepository = legalcaseRepository;
     }
 
-    public LegalCase createCase(LegalCase legalcase) {
+    public Legalcase createCase(Legalcase legalcase) {
         return legalcaseRepository.save(legalcase);
     }
 
-    public Optional<LegalCase> getCaseById(Long id) {
+    public Optional<Legalcase> getCaseById(Long id) {
         return legalcaseRepository.findById(id);
     }
 
-    public Optional<LegalCase> getCaseByUuid(String caseUuid) {
+    public Optional<Legalcase> getCaseByUuid(String caseUuid) {
         return legalcaseRepository.findByCaseuuid(caseUuid);
     }
 
-    public List<LegalCase> getCasesByStatus(Casestatus status) {
+    public List<Legalcase> getCasesByStatus(Casestatus status) {
         return legalcaseRepository.findByCurrentstatus(status);
     }
 
-    public List<LegalCase> getCasesByUser(Long userId) {
+    public List<Legalcase> getCasesByUser(Long userId) {
         return legalcaseRepository.findByCreatedbyId(userId);
     }
 
-    public List<LegalCase> getCasesBetweenDates(LocalDateTime start, LocalDateTime end) {
+    public List<Legalcase> getCasesBetweenDates(LocalDateTime start, LocalDateTime end) {
         return legalcaseRepository.findByCreatedatBetween(start, end);
     }
 
-    public Page<LegalCase> getAllCases(Pageable pageable) {
+    public Page<Legalcase> getAllCases(Pageable pageable) {
         return legalcaseRepository.findAll(pageable);
     }
 
-    public LegalCase updateCase(LegalCase legalcase) {
+    public Legalcase updateCase(Legalcase legalcase) {
         return legalcaseRepository.save(legalcase);
     }
 
