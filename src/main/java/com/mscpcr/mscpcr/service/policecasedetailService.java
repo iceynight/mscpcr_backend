@@ -1,14 +1,14 @@
 package com.mscpcr.mscpcr.service;
 
-import com.mscpcr.mscpcr.entity.PoliceCaseDetail;
-import com.mscpcr.mscpcr.entity.PoliceCaseDetail.policecasestatus;
-import com.mscpcr.mscpcr.repository.PoliceCaseDetailRepository;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import com.mscpcr.mscpcr.entity.PoliceCaseDetail;
+import com.mscpcr.mscpcr.entity.PoliceCaseDetail.policecasestatus;
+import com.mscpcr.mscpcr.repository.PoliceCaseDetailRepository;
 
 @Service
 @Transactional
@@ -23,16 +23,16 @@ public class PoliceCaseDetailService {
         return policeCaseDetailRepository.save(policeCaseDetail);
     }
 
-    public Optional<PoliceCaseDetail> findBylegalcaseId(Long caseId) {
-        return policeCaseDetailRepository.findBylegalcaseId(caseId);
+    public Optional<PoliceCaseDetail> findBylegalcase_Caseid(Long caseid) {
+        return policeCaseDetailRepository.findByLegalcase_Caseid(caseid);
     }
 
     public List<PoliceCaseDetail> findCasesByStatus(policecasestatus status) {
         return policeCaseDetailRepository.findByCasestatus(status);
     }
 
-    public PoliceCaseDetail updateCaseStatus(Long caseId, policecasestatus status) {
-        PoliceCaseDetail detail = policeCaseDetailRepository.findBylegalcaseId(caseId)
+    public PoliceCaseDetail updateCaseStatus(Long caseid, policecasestatus status) {
+        PoliceCaseDetail detail = findBylegalcase_Caseid(caseid)
             .orElseThrow(() -> new RuntimeException("Case not found"));
         detail.setCasestatus(status);
         return policeCaseDetailRepository.save(detail);

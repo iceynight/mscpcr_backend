@@ -1,7 +1,5 @@
 package com.mscpcr.mscpcr.service;
 
-
-
 import com.mscpcr.mscpcr.entity.CaseHistory;
 import com.mscpcr.mscpcr.repository.CaseHistoryRepository;
 import org.springframework.stereotype.Service;
@@ -22,11 +20,15 @@ public class CaseHistoryService {
         return casehistoryRepository.save(history);
     }
 
-    public List<CaseHistory> getHistoryByCaseId(Long caseId) {
-        return casehistoryRepository.findBylegalcaseIdOrderByActionatDesc(caseId);
+    public List<CaseHistory> getHistoryByCaseId(Long caseid) {
+        return casehistoryRepository.findBylegalcase_CaseidOrderByActionatDesc(caseid);
     }
 
     public List<CaseHistory> getHistoryByUserId(Long userId) {
         return casehistoryRepository.findByActionbyId(userId);
+    }
+
+    public List<CaseHistory> getHistoryByCaseIdAndFromStage(Long caseid, String fromStage) {
+        return casehistoryRepository.findByLegalcase_CaseidAndFromstage(caseid, fromStage);
     }
 }

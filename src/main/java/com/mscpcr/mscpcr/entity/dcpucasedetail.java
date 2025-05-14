@@ -26,7 +26,7 @@ public class DcpuCaseDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long dcpucaseid;
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "legalcase_id", nullable = false)

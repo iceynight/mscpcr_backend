@@ -33,7 +33,7 @@ public class Legalcase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long caseid;
 
     @Column(unique = true, nullable = false)
     private String caseuuid;
@@ -114,12 +114,18 @@ public class Legalcase {
         }
     }
 
+    public void removeDcpuCaseDetail(DcpuCaseDetail detail) {
+        this.dcpuCaseDetails.remove(detail);
+        detail.setLegalcase(null);
+    }
+
     @PrePersist
     protected void onCreate() {
         if (caseuuid == null) {
             caseuuid = UUID.randomUUID().toString();
         }
     }
+   
 
     public enum Gender {
         male, female, other
