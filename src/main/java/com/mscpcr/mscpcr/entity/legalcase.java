@@ -14,6 +14,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,10 +32,11 @@ import lombok.Setter;
 @Setter
 public class Legalcase {
 
-    @Id
+     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long caseid;
-
+    @Column(name = "id")  // Explicitly map to the 'id' column
+    private Long caseid;  
+    
     @Column(unique = true, nullable = false)
     private String caseuuid;
 
@@ -100,8 +102,8 @@ public class Legalcase {
     @JoinColumn(name = "district_id")
     private District district;
 
-    @OneToMany(mappedBy = "legalcase", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DcpuCaseDetail> dcpuCaseDetails = new ArrayList<>();
+    @OneToMany(mappedBy = "legalcase", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+private List<DcpuCaseDetail> dcpuCaseDetails = new ArrayList<>();
 
     /**
      * Adds a DcpuCaseDetail to this Legalcase.

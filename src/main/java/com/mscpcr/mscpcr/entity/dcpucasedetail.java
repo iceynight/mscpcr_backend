@@ -9,6 +9,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,9 +30,13 @@ public class DcpuCaseDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long dcpucaseid;
     
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "legalcase_id", nullable = false)
-    private Legalcase legalcase;
+   @ManyToOne(fetch = FetchType.LAZY)
+@JoinColumn(
+    name = "legalcase_id", 
+    referencedColumnName = "id",  // Explicitly reference the 'id' column
+    foreignKey = @ForeignKey(name = "fk_dcpucasedetail_legalcase")
+)
+private Legalcase legalcase;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

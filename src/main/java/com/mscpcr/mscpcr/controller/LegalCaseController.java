@@ -60,25 +60,39 @@ public class LegalcaseController {
                          BindingResult bindingResult,
                          Principal principal,
                          Model model) {
-        
+
         if (bindingResult.hasErrors()) {
             addEnumAttributes(model);
             return "dcpu-add-case";
         }
 
-        AppUser currentUser = appUserService.getUserByUsername(principal.getName())
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        
-        Legalcase legalcase = createLegalcaseFromDTO(caseForm, currentUser);
-        legalcase = legalcaseRepository.save(legalcase); // Save legalcase first
+        try {
+            AppUser currentUser = appUserService.getUserByUsername(principal.getName())
+                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        DcpuCaseDetail dcpuCaseDetail = createDcpuCaseDetailFromDTO(caseForm, currentUser);
-        dcpuCaseDetail.setLegalcase(legalcase); // Set legalcase to detail
-        
-        handleWorkflowTransitions(legalcase, dcpuCaseDetail, currentUser);
-        saveCaseWithDetails(legalcase, dcpuCaseDetail);
-        
-        return "redirect:/dcpu-dashboard";
+            // 1. Create and populate the Legalcase
+            Legalcase legalcase = createLegalcaseFromDTO(caseForm, currentUser);
+            
+            // 2. Create and populate the DcpuCaseDetail
+            DcpuCaseDetail dcpuCaseDetail = createDcpuCaseDetailFromDTO(caseForm, currentUser);
+            
+            // 3. Handle any workflow transitions
+            handleWorkflowTransitions(legalcase, dcpuCaseDetail, currentUser);
+            
+            // 4. Establish the bidirectional relationship
+            legalcase.addDcpuCaseDetail(dcpuCaseDetail);
+            
+            // 5. Save only the Legalcase - the DcpuCaseDetail will cascade
+            legalcaseRepository.save(legalcase);
+            
+            return "redirect:/dcpu-dashboard";
+            
+        } catch (Exception e) {
+            logger.error("Error saving case: {}", e.getMessage());
+            model.addAttribute("error", "Failed to save case. Please try again.");
+            addEnumAttributes(model);
+            return "dcpu-add-case";
+        }
     }
 
     private void addEnumAttributes(Model model) {
@@ -131,10 +145,5 @@ public class LegalcaseController {
             legalcase.setCurrentstatus(Legalcase.Casestatus.solved);
             legalcase.setSolvedat(LocalDateTime.now());
         }
-    }
-
-    private void saveCaseWithDetails(Legalcase legalcase, DcpuCaseDetail detail) {
-        dcpuCaseDetailRepository.save(detail);
-        legalcase.addDcpuCaseDetail(detail);
     }
 }
