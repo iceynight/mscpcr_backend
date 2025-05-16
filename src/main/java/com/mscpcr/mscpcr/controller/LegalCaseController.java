@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired; // Add this import
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -24,6 +24,7 @@ import com.mscpcr.mscpcr.repository.DistrictRepository;
 import com.mscpcr.mscpcr.repository.LegalcaseRepository;
 import com.mscpcr.mscpcr.service.AppUserService;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
@@ -59,7 +60,8 @@ public class LegalcaseController {
     public String addCase(@Valid @ModelAttribute("caseForm") CaseFormDTO caseForm,
                          BindingResult bindingResult,
                          Principal principal,
-                         Model model) {
+                         Model model,
+                         HttpSession session) {
 
         if (bindingResult.hasErrors()) {
             addEnumAttributes(model);
@@ -72,21 +74,27 @@ public class LegalcaseController {
 
             // 1. Create and populate the Legalcase
             Legalcase legalcase = createLegalcaseFromDTO(caseForm, currentUser);
-            
+
             // 2. Create and populate the DcpuCaseDetail
             DcpuCaseDetail dcpuCaseDetail = createDcpuCaseDetailFromDTO(caseForm, currentUser);
-            
+
             // 3. Handle any workflow transitions
             handleWorkflowTransitions(legalcase, dcpuCaseDetail, currentUser);
-            
+
             // 4. Establish the bidirectional relationship
             legalcase.addDcpuCaseDetail(dcpuCaseDetail);
-            
+
             // 5. Save only the Legalcase - the DcpuCaseDetail will cascade
             legalcaseRepository.save(legalcase);
-            
+
+            // Set notification in session to be displayed on police dashboard if transferred
+            if (dcpuCaseDetail.getActionbycwc() == DcpuCaseDetail.dcpuaction.TRANSFERRED) {
+                session.setAttribute("newCaseNotification",
+                    "New case forwarded from DCPU of " + currentUser.getDistrict().getName());
+            }
+
             return "redirect:/dcpu-dashboard";
-            
+
         } catch (Exception e) {
             logger.error("Error saving case: {}", e.getMessage());
             model.addAttribute("error", "Failed to save case. Please try again.");
