@@ -35,10 +35,15 @@ public class DcpuCaseDetailService {
         return dcpuCaseDetailRepository.findByCaseprogress(progress);
     }
 
+    // BUG FIX: Handle the case where multiple DcpuCaseDetail records may exist for a Legalcase.
+    // Always update the latest (most recent) DcpuCaseDetail for the given Legalcase.
     public DcpuCaseDetail updateCaseProgress(Long caseid, caseprogress progress) {
-        DcpuCaseDetail detail = findByLegalcase_Caseid(caseid)
-                .orElseThrow(() -> new RuntimeException("Case not found"));
-        detail.setCaseprogress(progress);
-        return dcpuCaseDetailRepository.save(detail);
+        List<DcpuCaseDetail> details = dcpuCaseDetailRepository.findAllByLegalcase_CaseidOrderByCreatedatDesc(caseid);
+        if (details.isEmpty()) {
+            throw new IllegalArgumentException("DCPU Case Detail not found for Legalcase ID: " + caseid);
+        }
+        DcpuCaseDetail latestDetail = details.get(0);
+        latestDetail.setCaseprogress(progress);
+        return dcpuCaseDetailRepository.save(latestDetail);
     }
 }

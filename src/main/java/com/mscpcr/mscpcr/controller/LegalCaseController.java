@@ -3,7 +3,6 @@ package com.mscpcr.mscpcr.controller;
 import java.security.Principal;
 import java.time.LocalDateTime;
 
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,13 +23,14 @@ import com.mscpcr.mscpcr.repository.DistrictRepository;
 import com.mscpcr.mscpcr.repository.LegalcaseRepository;
 import com.mscpcr.mscpcr.service.AppUserService;
 
+import ch.qos.logback.classic.Logger;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/cases")
 public class LegalcaseController {
-    private static final Logger logger = LoggerFactory.getLogger(LegalcaseController.class);
+    private static final Logger logger = (Logger) LoggerFactory.getLogger(LegalcaseController.class);
 
     private final LegalcaseRepository legalcaseRepository;
     private final DcpuCaseDetailRepository dcpuCaseDetailRepository;
@@ -88,9 +88,10 @@ public class LegalcaseController {
             legalcaseRepository.save(legalcase);
 
             // Set notification in session to be displayed on police dashboard if transferred
+            // When forwarding a case to police
             if (dcpuCaseDetail.getActionbycwc() == DcpuCaseDetail.dcpuaction.TRANSFERRED) {
                 session.setAttribute("newCaseNotification",
-                    "New case forwarded from DCPU of " + currentUser.getDistrict().getName());
+                    "New case #" + legalcase.getCaseuuid() + " forwarded from DCPU to Police Department");
             }
 
             return "redirect:/dcpu-dashboard";
@@ -101,6 +102,21 @@ public class LegalcaseController {
             addEnumAttributes(model);
             return "dcpu-add-case";
         }
+    }
+
+    @GetMapping("/dashboard")
+    public String showDashboard(Model model) {
+        long totalCases = legalcaseRepository.count();
+        long dcpuProcessingCases = legalcaseRepository.countByCurrentstatus(Legalcase.Casestatus.dcpuprocessing);
+        long policeProcessingCases = legalcaseRepository.countByCurrentstatus(Legalcase.Casestatus.policeprocessing);
+        long solvedCases = legalcaseRepository.countByCurrentstatus(Legalcase.Casestatus.solved); // Use countByCurrentstatus
+
+        model.addAttribute("totalCases", totalCases);
+        model.addAttribute("dcpuProcessingCases", dcpuProcessingCases);
+        model.addAttribute("policeProcessingCases", policeProcessingCases);
+        model.addAttribute("solvedCases", solvedCases);
+
+        return "dashboard";
     }
 
     private void addEnumAttributes(Model model) {
@@ -153,5 +169,21 @@ public class LegalcaseController {
             legalcase.setCurrentstatus(Legalcase.Casestatus.solved);
             legalcase.setSolvedat(LocalDateTime.now());
         }
+    }
+
+    // Example notification setting (in the method where you save DcpuCaseDetail)
+    private void setNotification(Legalcase legalcase, DcpuCaseDetail.dcpuaction actionbycwc, HttpSession session) {
+        String targetDepartment = "";
+        if (actionbycwc == DcpuCaseDetail.dcpuaction.TRANSFERRED) {
+            targetDepartment = "Police";
+        } else if (actionbycwc == DcpuCaseDetail.dcpuaction.UNDER_SUPERVISION) {
+            targetDepartment = "DCPU";
+        } else {
+            targetDepartment = "Court"; // Assuming a "Court" action exists
+        }
+
+        session.setAttribute("newCaseNotification",
+                "Case #" + legalcase.getCaseuuid() +
+                        " forwarded to " + targetDepartment);
     }
 }
