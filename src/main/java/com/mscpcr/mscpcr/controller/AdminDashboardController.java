@@ -1,5 +1,7 @@
 package com.mscpcr.mscpcr.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,15 +25,15 @@ public class AdminDashboardController {
 
     @GetMapping("/home")
     public String showDashboard(Model model, HttpSession session) {
-        // Get all statistics in one call
-        model.addAllAttributes(caseStatisticsService.getDashboardStatistics());
-        
-        // Handle notifications
-        if (session.getAttribute("newCaseNotification") != null) {
-            model.addAttribute("notification", session.getAttribute("newCaseNotification"));
-            session.removeAttribute("newCaseNotification");
-        }
-        
+        Map<String, Long> stats = caseStatisticsService.getDashboardStatistics();
+
+        model.addAttribute("totalCases", stats.getOrDefault("totalCases", 0L));
+        model.addAttribute("totalCasesSolved", stats.getOrDefault("totalCasesSolved", 0L));
+        model.addAttribute("totalCasesProcessing", stats.getOrDefault("totalCasesProcessing", 0L));
+        model.addAttribute("casesInDCPU", stats.getOrDefault("casesInDCPU", 0L));
+        model.addAttribute("processingInPolice", stats.getOrDefault("processingInPolice", 0L));
+        model.addAttribute("processingInCourt", stats.getOrDefault("processingInCourt", 0L));
+
         return "admin-dashboard";
     }
 }

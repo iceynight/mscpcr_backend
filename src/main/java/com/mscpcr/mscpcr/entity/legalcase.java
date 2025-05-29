@@ -133,7 +133,10 @@ private List<DcpuCaseDetail> dcpuCaseDetails = new ArrayList<>();
         male, female, other
     }
 
-    public enum Casestatus {
-        dcpuprocessing, policeprocessing, courtprocessing, solved, closed
-    }
+   public enum Casestatus {
+    solved,
+    dcpuprocessing,
+    policeprocessing,
+    courtprocessing
+}
 }

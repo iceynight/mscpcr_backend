@@ -15,6 +15,13 @@ import com.mscpcr.mscpcr.entity.Legalcase.Casestatus;
 
 @Repository
 public interface LegalcaseRepository extends JpaRepository<Legalcase, Long> {
+
+ @Query("SELECT COUNT(l) FROM Legalcase l WHERE l.currentstatus = 'SOLVED'")
+    long countSolvedCasesDebug();
+    
+    @Query("SELECT COUNT(l) FROM Legalcase l WHERE l.currentstatus = 'DCPUPROCESSING'")
+    long countDcpuCasesDebug();
+
     Optional<Legalcase> findByCaseuuid(String caseUuid);
     List<Legalcase> findByCurrentstatus(Casestatus status);
     List<Legalcase> findByDistrictId(Long districtId);
