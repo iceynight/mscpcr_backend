@@ -186,10 +186,10 @@
                         <!-- First Row of Cards -->
                         <div class="col-md-4">
                             <div class="stat-card" style="background: linear-gradient(135deg, #2ecc71, #27ae60);">
-                                <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex justify-content-center align-items-center">
                                     <div>
                                         
-                                        <div class="stat-value" th:text="${totalCasesSolved}">0</div>
+                                        <div class="stat-value" id="casesSolved">0</div>
                                         <div class="stat-title">Cases Solved</div>
                                     </div>
                                 </div>
@@ -200,7 +200,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                        
-                                        <div class="stat-value" th:text="${totalCasesProcessing}">0</div>
+                                        <div class="stat-value" id="casesProcessing">0</div>
                                         <div class="stat-title">Cases in Processing</div>
                                     </div>
                                 </div>
@@ -211,7 +211,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                        
-                                        <div class="stat-value" th:text="${totalCases}">0</div>
+                                        <div class="stat-value" id="totalCases">0</div>
                                         <div class="stat-title">Total Cases</div>
                                     </div>
                                 </div>
@@ -226,7 +226,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                         
-<div class="stat-value" th:text="${casesInDCPU}">0</div>
+<div class="stat-value" id="casesProcessingDCPU">0</div>
                                         <div class="stat-title">Cases in DCPU</div>
                                     </div>
                                 </div>
@@ -237,7 +237,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                        
-<div class="stat-value" th:text="${processingInPolice}">0</div>
+<div class="stat-value" id="casesProcessingPolice">0</div>
                                         <div class="stat-title">Processing in Police</div>
                                     </div>
                                 </div>
@@ -248,7 +248,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                         
-<div class="stat-value" th:text="${processingInCourt}">0</div>
+<div class="stat-value" id="casesProcessingCourt">0</div>
                                         <div class="stat-title">Processing in Court</div>
                                     </div>
                                 </div>
@@ -304,6 +304,44 @@ document.addEventListener("DOMContentLoaded", function() {
             $(notif).alert('close');
         }, 5000);
     }
+});
+
+$(document).ready(function () {
+    $.ajax({
+        url: 'http://localhost:8083/api/legalcase/currentstatuses', 
+        method: 'GET',
+        success: function (response) {
+            let solvedCount = 0;
+            let casesInDCPU = 0;
+            let processingInPolice = 0;
+            let processingInCourt = 0;
+            response.forEach(status => {
+                if (status === 'solved') {
+                    solvedCount++;
+                } else if (status === 'dcpuprocessing') {
+                    casesInDCPU++;
+                } else if (status === 'policeprocessing') {
+                    processingInPolice++;
+                } else if (status === 'courtprocessing') {
+                    processingInCourt++;
+                } 
+            });
+
+            let processingCount = casesInDCPU + processingInPolice + processingInCourt;
+            let totalCount = solvedCount + processingCount;
+
+            // Update HTML
+            $('#casesSolved').text(solvedCount);
+            $('#casesProcessing').text(processingCount);
+            $('#totalCases').text(totalCount);  
+            $('#casesProcessingDCPU').text(casesInDCPU);
+            $('#casesProcessingPolice').text(processingInPolice);   
+            $('#casesProcessingCourt').text(processingInCourt);
+        },
+        error: function (xhr, status, error) {
+            console.error("Failed to fetch case data:", error);
+        }
+    });
 });
 </script>
 </html>

@@ -24,6 +24,7 @@ import com.mscpcr.mscpcr.repository.LegalcaseRepository;
 @Transactional
 public class LegalcaseService {
 
+    
     private final LegalcaseRepository legalcaseRepository;
     private final DcpuCaseDetailRepository dcpuCaseDetailRepository;
 
